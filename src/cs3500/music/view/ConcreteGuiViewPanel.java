@@ -14,7 +14,9 @@ import javax.swing.*;
 public class ConcreteGuiViewPanel extends JPanel {
 
   @Override
-  public void paint(Graphics g){
+  public void paintComponent(Graphics g){
+    // Handle the default painting
+    super.paintComponent(g);
     // Look for more documentation about the Graphics class,
     // and methods on it that may be useful
     g.drawString("Hello World", 25, 25);
