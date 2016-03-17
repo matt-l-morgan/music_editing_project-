@@ -1,0 +1,319 @@
+package cs3500.music.model;
+
+/**
+ * Created by mattmorgan on 3/2/16.
+ */
+
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Implementation of the IMUSICEDITOR
+ */
+public class MusicEditorModel implements IMusicEditorModel {
+  /**
+   * an Hashmap of the notes where the key is
+   * the beat and the set is the notes at that beat
+   */
+  private HashMap<Integer, HashSet<Note>> notes;
+  private int lowestNoteInt;
+  private int highestNoteInt;
+  private int lastBeatInt;
+
+  /**
+   * zero argument constructor of a MusicEditorModel
+   */
+  public MusicEditorModel(){
+    this.notes = new HashMap<Integer, HashSet<Note>>();
+    this.lowestNoteInt = 500;
+    this.highestNoteInt = -1;
+  }
+
+
+  /**
+   * getter for lowestnote
+   * @return int this.lowestNoteInt
+   */
+  @Override
+  public int getLowestNoteInt() {
+    return this.lowestNoteInt;
+  }
+
+  /**
+   * getter for lowestnote
+   * @return int this.highestnote
+   */
+  @Override
+  public int getHighestNoteInt() {
+    return this.highestNoteInt;
+  }
+
+  /**
+   * getter for the last beat of this model
+   * @return this.lastbeatInt
+   */
+  @Override
+  public int getLastBeatInt() {
+    return this.lastBeatInt;
+  }
+
+  /**
+   * getter for the notes of this model
+   * @return the HashMap<Integer, HashSet<Note>>
+   */
+  @Override
+  public HashMap<Integer, HashSet<Note>> getNotes(){
+    return this.notes;
+  }
+
+  /**
+   * adds the given models notes to the end of this, models notes
+   * @param m the given model who's notes we will play
+   */
+  @Override
+  public void playConsecutively(IMusicEditorModel m) {
+    int endingbeat = this.getLastBeatInt() + 1;
+    HashSet<Note> song2Notes = new HashSet<Note>();
+    for (int i = 0; i < m.getLastBeatInt(); i++){
+      Collection<Note> note_at_beat = m.getNotesAtBeat(i);
+      song2Notes.addAll(note_at_beat);
+    }
+    Iterator song2it = song2Notes.iterator();
+
+    while (song2it.hasNext()){
+      Note note = (Note)song2it.next();
+      note.changeStartbeat(endingbeat + note.getStartbeat());
+      this.addNote(note);
+    }
+  }
+
+  /**
+   * plays this piece of music at the same time as the given model's notes
+   * @param m the given model who's notes we will play
+   */
+  @Override
+  public void playSimultaneously(IMusicEditorModel m) {
+    for (int i = 0; i < m.getLastBeatInt(); i++) {
+      m.getNotesAtBeat(i).forEach(this::addNote);
+    }
+  }
+
+  /**
+   * updates the highest, lowest, and last note when adding a new
+   * note
+   * @param note the note to be compared
+   */
+  public void renewEdges(Note note){
+    int noteInt = note.getPandoValue();
+    if (noteInt > this.highestNoteInt){
+      this.highestNoteInt = noteInt;
+    }
+    if (noteInt < this.lowestNoteInt){
+      this.lowestNoteInt = noteInt;
+    }
+    if (note.getDuration() + note.getStartbeat() > this.lastBeatInt){
+      this.lastBeatInt = note.getDuration() + note.getStartbeat();
+    }
+  }
+
+  /**
+   * adds a note to this.notes
+   * @param note the note to be added
+   */
+  @Override
+  public void addNote(Note note) {
+    if (!this.notes.containsKey(note.getStartbeat())) {
+      this.notes.put(note.getStartbeat(), new HashSet<Note>());
+    }
+    this.notes.get(note.getStartbeat()).add(note);
+    this.renewEdges(note);
+  }
+
+  /**
+   * removes a note from this.notes
+   * @param note the note to be removed
+   * @throws IllegalArgumentException if the note is not in this.notes
+   */
+  @Override
+  public void removeNote(Note note) throws IllegalArgumentException{
+    if (this.notes.containsKey(note.getStartbeat()) &&
+      this.notes.get(note.getStartbeat()).contains(note)){
+
+      this.lastBeatInt = 0;
+      this.highestNoteInt = -1;
+      this.lowestNoteInt = 10000;
+      this.notes.get(note.getStartbeat()).remove(note);
+
+      for (HashSet<Note> this_set : this.notes.values()) {
+        this_set.forEach(this::renewEdges);
+      }
+    }
+    else {
+      throw new IllegalArgumentException("no such note!");
+    }
+  }
+
+  /**
+   * method that displays the model Via string
+   * @return the string representation of the model
+   * Helper is create row
+   */
+  @Override
+  public String displaySong() {
+    int space = Integer.toString(this.getLastBeatInt()).length();
+    StringBuilder result = new StringBuilder(String.format("%" + space + "s", new Object[]{""}));
+
+    int i;
+    for(i = this.getLowestNoteInt(); i <= this.getHighestNoteInt(); ++i) {
+      result.append(String.format
+        ("%4s", new Object[]{Note.Pitch.toStringFromint(i % 12) + i / 12}));
+    }
+
+    for(i = 0; i < this.getLastBeatInt(); ++i) {
+      result.append(String.format("\n%" + space + "d ",
+        new Object[]{Integer.valueOf(i)})).append(this.createRow(i));
+    }
+    return result.toString();
+  }
+
+
+
+  /**
+   * creates a row to add to the consol display
+   * HELPER for DisplaySong
+   * @param beat the beat to make a row up
+   * @return a string for that row
+   */
+  private String createRow(int beat) {
+    Collection notesAtBeat = this.getNotesAtBeat(beat);
+    int buffer = 4 * (this.getHighestNoteInt() - this.getLowestNoteInt()) + 2;
+    StringBuilder finished = new StringBuilder(String.format("%" + buffer + "s", new Object[]{""}));
+
+    for (Object a : notesAtBeat) {
+      Note n = (Note) a;
+      int index = 4 * (n.getPandoValue() - this.getLowestNoteInt()) + 1;
+      if (n.getStartbeat() == beat) {
+        finished.setCharAt(index, 'X');
+      } else if (beat > n.getStartbeat() && beat < n.getStartbeat() + n.getDuration()
+        && finished.charAt(index) != 88) {
+        finished.setCharAt(index, '|');
+      }
+    }
+
+    return finished.toString();
+  }
+
+  /**
+   * Gets all the notes at a given beat
+   * @param beat the beat to take notes from
+   * @return a Collection of notes at that beat
+   * @throws IllegalArgumentException if beat is less than 0
+   */
+  public Collection<Note> getNotesAtBeat(int beat) throws IllegalArgumentException {
+    if(beat < 0) {
+      throw new IllegalArgumentException("Not a valid beat.");
+    } else {
+      HashSet<Note> finished = new HashSet<Note>();
+
+      for (HashSet<Note> set : this.notes.values()) {
+        HashSet<Note> new_set = set.stream()
+          .filter(n -> (n.getStartbeat() <= beat && n.getStartbeat() + n.getDuration() >= beat)).
+            collect(Collectors.toCollection(HashSet<Note>::new));
+        finished.addAll(new_set);
+      }
+      return Collections.unmodifiableSet(finished);
+    }
+  }
+
+  /**
+   * alters the given beat by changing it's duratoin
+   * @param note note to be changed
+   * @param duration and int for the new duration
+   * @throws IllegalArgumentException if the given note is not in this.notes
+   * or the duration is invalid
+   */
+  @Override
+  public void changeNoteDuration(Note note, int duration) {
+    if(this.notes.containsKey(note.getStartbeat()) &&
+      this.notes.get(note.getStartbeat()).contains(note) &&
+      duration > 0){
+      this.notes.get(note.getStartbeat()).remove(note);
+      note.changeDuration(duration);
+      this.notes.get(note.getStartbeat()).add(note);
+      this.renewEdges(note);
+    }
+    else {
+      throw new IllegalArgumentException("no such note, or invalid duration");
+    }
+  }
+
+  /**
+   * alters the given beat by changing it's pitch
+   * @param note note to be changed
+   * @param pitch the new pitch for the given note
+   * @throws IllegalArgumentException if the given note is not in this.notes
+   */
+  @Override
+  public void changeNotePitch(Note note, Note.Pitch pitch) {
+    if(this.notes.containsKey(note.getStartbeat()) &&
+      this.notes.get(note.getStartbeat()).contains(note)) {
+      this.notes.get(note.getStartbeat()).remove(note);
+      note.changePitch(pitch);
+      this.notes.get(note.getStartbeat()).add(note);
+      this.renewEdges(note);
+    }
+    else {
+      throw new IllegalArgumentException("no such note");
+    }
+  }
+
+  /**
+   * alters the given beat by changing it's octave
+   * @param note note to be changed
+   * @param octave an int for the new octave
+   * @throws IllegalArgumentException if the given note is not in this.notes
+   * or the octave is invalid
+   */
+  @Override
+  public void changeNoteOctave(Note note, int octave) {
+    if(this.notes.containsKey(note.getStartbeat()) &&
+      this.notes.get(note.getStartbeat()).contains(note) &&
+      octave >= 0 && octave < 10) {
+      this.notes.get(note.getStartbeat()).remove(note);
+      note.changeOctave(octave);
+      this.notes.get(note.getStartbeat()).add(note);
+      this.renewEdges(note);
+    }
+    else {
+      throw new IllegalArgumentException("invalid input");
+    }
+  }
+
+  /**
+   * alters the given beat by changing it's starting note
+   * @param note note to be changed
+   * @param startBeat an int for the new startingbeat
+   * @throws IllegalArgumentException if the given note is not in this.notes
+   * or the given int is <0
+   */
+  @Override public void changeNoteStartBeat(Note note, int startBeat) {
+    if(this.notes.containsKey(note.getStartbeat()) &&
+      this.notes.get(note.getStartbeat()).contains(note) &&
+      startBeat >= 0) {
+      this.notes.get(note.getStartbeat()).remove(note);
+      note.changeStartbeat(startBeat);
+      if (this.notes.containsKey(note.getStartbeat())) {
+        this.notes.get(note.getStartbeat()).add(note);
+      } else {
+        this.notes.put(note.getStartbeat(), new HashSet<Note>());
+        this.notes.get(note.getStartbeat()).add(note);
+      }
+      this.renewEdges(note);
+    }
+    else {
+      throw new IllegalArgumentException("invalid input");
+    }
+  }
+}
+
