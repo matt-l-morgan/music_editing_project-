@@ -13,6 +13,5 @@ public class MusicEditor {
     MidiView midiView = new MidiViewImpl();
     // You probably need to connect these views to your model, too...
 
-    TEST THAT THIS IS WORKING
   }
 }
