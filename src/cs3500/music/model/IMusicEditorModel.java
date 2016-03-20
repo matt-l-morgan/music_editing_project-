@@ -19,12 +19,12 @@ public interface IMusicEditorModel {
   /**
    * an add note function for the music player
    */
-  public void addNote(Note note);
+  public void addNote(AbstractNote note);
 
   /**
    * a remove note object for the music player
    */
-  public void removeNote(Note note);
+  public void removeNote(AbstractNote note);
 
   /**
    * a display song fuction for the music player
@@ -37,24 +37,24 @@ public interface IMusicEditorModel {
    * mutations a note's duration
    * @param note the note to be changed
    */
-  public void changeNoteDuration(Note note, int duration);
+  public void changeNoteDuration(AbstractNote note, int duration);
 
   /**
    * mutates a note's pitch
    * @param note the note to be changed
    */
-  public void changeNotePitch(Note note, Note.Pitch pitch);
+  public void changeNotePitch(AbstractNote note, Pitch pitch);
 
   /**
    * change's a note's octave
    * @param note the note to be changed
    */
-  public void changeNoteOctave(Note note, int octave);
+  public void changeNoteOctave(AbstractNote note, int octave);
 
   /**
    * changes the starting beat of a note
    */
-  public void changeNoteStartBeat(Note note, int startBeat);
+  public void changeNoteStartBeat(AbstractNote note, int startBeat);
 
   /**
    * gives the integer representation of the lowest note
@@ -78,7 +78,7 @@ public interface IMusicEditorModel {
    * getter for the notes of this model
    * @return the HashMap<Integer, HashSet<Note>>
    */
-  public HashMap<Integer, HashSet<Note>> getNotes();
+  public HashMap<Integer, HashSet<AbstractNote>> getNotes();
 
   /**
    * adds the given models notes to the end of this, models notes
@@ -98,7 +98,7 @@ public interface IMusicEditorModel {
    * @return a Collection of notes at that beat
    * @throws IllegalArgumentException if beat is less than 0
    */
-  public Collection<Note> getNotesAtBeat(int beat);
+  public Collection<AbstractNote> getNotesAtBeat(int beat);
 
 
 }

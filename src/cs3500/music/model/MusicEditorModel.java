@@ -16,7 +16,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * an Hashmap of the notes where the key is
    * the beat and the set is the notes at that beat
    */
-  private HashMap<Integer, HashSet<Note>> notes;
+  private HashMap<Integer, HashSet<AbstractNote>> notes;
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
@@ -25,7 +25,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * zero argument constructor of a MusicEditorModel
    */
   public MusicEditorModel(){
-    this.notes = new HashMap<Integer, HashSet<Note>>();
+    this.notes = new HashMap<Integer, HashSet<AbstractNote>>();
     this.lowestNoteInt = 500;
     this.highestNoteInt = -1;
   }
@@ -63,7 +63,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @return the HashMap<Integer, HashSet<Note>>
    */
   @Override
-  public HashMap<Integer, HashSet<Note>> getNotes(){
+  public HashMap<Integer, HashSet<AbstractNote>> getNotes(){
     return this.notes;
   }
 
@@ -74,9 +74,9 @@ public class MusicEditorModel implements IMusicEditorModel {
   @Override
   public void playConsecutively(IMusicEditorModel m) {
     int endingbeat = this.getLastBeatInt() + 1;
-    HashSet<Note> song2Notes = new HashSet<Note>();
+    HashSet<AbstractNote> song2Notes = new HashSet<AbstractNote>();
     for (int i = 0; i < m.getLastBeatInt(); i++){
-      Collection<Note> note_at_beat = m.getNotesAtBeat(i);
+      Collection<AbstractNote> note_at_beat = m.getNotesAtBeat(i);
       song2Notes.addAll(note_at_beat);
     }
     Iterator song2it = song2Notes.iterator();
@@ -104,7 +104,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * note
    * @param note the note to be compared
    */
-  public void renewEdges(Note note){
+  public void renewEdges(AbstractNote note){
     int noteInt = note.getPandoValue();
     if (noteInt > this.highestNoteInt){
       this.highestNoteInt = noteInt;
@@ -122,9 +122,9 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @param note the note to be added
    */
   @Override
-  public void addNote(Note note) {
+  public void addNote(AbstractNote note) {
     if (!this.notes.containsKey(note.getStartbeat())) {
-      this.notes.put(note.getStartbeat(), new HashSet<Note>());
+      this.notes.put(note.getStartbeat(), new HashSet<AbstractNote>());
     }
     this.notes.get(note.getStartbeat()).add(note);
     this.renewEdges(note);
@@ -136,7 +136,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @throws IllegalArgumentException if the note is not in this.notes
    */
   @Override
-  public void removeNote(Note note) throws IllegalArgumentException{
+  public void removeNote(AbstractNote note) throws IllegalArgumentException{
     if (this.notes.containsKey(note.getStartbeat()) &&
       this.notes.get(note.getStartbeat()).contains(note)){
 
@@ -145,7 +145,7 @@ public class MusicEditorModel implements IMusicEditorModel {
       this.lowestNoteInt = 10000;
       this.notes.get(note.getStartbeat()).remove(note);
 
-      for (HashSet<Note> this_set : this.notes.values()) {
+      for (HashSet<AbstractNote> this_set : this.notes.values()) {
         this_set.forEach(this::renewEdges);
       }
     }
@@ -167,7 +167,7 @@ public class MusicEditorModel implements IMusicEditorModel {
     int i;
     for(i = this.getLowestNoteInt(); i <= this.getHighestNoteInt(); ++i) {
       result.append(String.format
-        ("%4s", new Object[]{Note.Pitch.toStringFromint(i % 12) + i / 12}));
+        ("%4s", new Object[]{Pitch.toStringFromint(i % 12) + i / 12}));
     }
 
     for(i = 0; i < this.getLastBeatInt(); ++i) {
@@ -210,16 +210,16 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @return a Collection of notes at that beat
    * @throws IllegalArgumentException if beat is less than 0
    */
-  public Collection<Note> getNotesAtBeat(int beat) throws IllegalArgumentException {
+  public Collection<AbstractNote> getNotesAtBeat(int beat) throws IllegalArgumentException {
     if(beat < 0) {
       throw new IllegalArgumentException("Not a valid beat.");
     } else {
-      HashSet<Note> finished = new HashSet<Note>();
+      HashSet<AbstractNote> finished = new HashSet<AbstractNote>();
 
-      for (HashSet<Note> set : this.notes.values()) {
-        HashSet<Note> new_set = set.stream()
+      for (HashSet<AbstractNote> set : this.notes.values()) {
+        HashSet<AbstractNote> new_set = set.stream()
           .filter(n -> (n.getStartbeat() <= beat && n.getStartbeat() + n.getDuration() >= beat)).
-            collect(Collectors.toCollection(HashSet<Note>::new));
+            collect(Collectors.toCollection(HashSet<AbstractNote>::new));
         finished.addAll(new_set);
       }
       return Collections.unmodifiableSet(finished);
@@ -234,7 +234,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * or the duration is invalid
    */
   @Override
-  public void changeNoteDuration(Note note, int duration) {
+  public void changeNoteDuration(AbstractNote note, int duration) {
     if(this.notes.containsKey(note.getStartbeat()) &&
       this.notes.get(note.getStartbeat()).contains(note) &&
       duration > 0){
@@ -255,7 +255,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @throws IllegalArgumentException if the given note is not in this.notes
    */
   @Override
-  public void changeNotePitch(Note note, Note.Pitch pitch) {
+  public void changeNotePitch(AbstractNote note, Pitch pitch) {
     if(this.notes.containsKey(note.getStartbeat()) &&
       this.notes.get(note.getStartbeat()).contains(note)) {
       this.notes.get(note.getStartbeat()).remove(note);
@@ -276,7 +276,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * or the octave is invalid
    */
   @Override
-  public void changeNoteOctave(Note note, int octave) {
+  public void changeNoteOctave(AbstractNote note, int octave) {
     if(this.notes.containsKey(note.getStartbeat()) &&
       this.notes.get(note.getStartbeat()).contains(note) &&
       octave >= 0 && octave < 10) {
@@ -297,7 +297,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @throws IllegalArgumentException if the given note is not in this.notes
    * or the given int is <0
    */
-  @Override public void changeNoteStartBeat(Note note, int startBeat) {
+  @Override public void changeNoteStartBeat(AbstractNote note, int startBeat) {
     if(this.notes.containsKey(note.getStartbeat()) &&
       this.notes.get(note.getStartbeat()).contains(note) &&
       startBeat >= 0) {
@@ -306,7 +306,7 @@ public class MusicEditorModel implements IMusicEditorModel {
       if (this.notes.containsKey(note.getStartbeat())) {
         this.notes.get(note.getStartbeat()).add(note);
       } else {
-        this.notes.put(note.getStartbeat(), new HashSet<Note>());
+        this.notes.put(note.getStartbeat(), new HashSet<AbstractNote>());
         this.notes.get(note.getStartbeat()).add(note);
       }
       this.renewEdges(note);

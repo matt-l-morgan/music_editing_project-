@@ -21,9 +21,9 @@ public class MusicEditorModelTests {
   public void testGetLowestNoteInt()  {
     MusicEditorModel m = new MusicEditorModel();
     assertEquals(m.getLowestNoteInt(), 500);
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -34,9 +34,9 @@ public class MusicEditorModelTests {
   public void testGetHighestNoteInt()  {
     MusicEditorModel m = new MusicEditorModel();
     assertEquals(m.getHighestNoteInt(), -1);
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -47,9 +47,9 @@ public class MusicEditorModelTests {
   public void testGetLastBeatInt()  {
     MusicEditorModel m = new MusicEditorModel();
     assertEquals(m.getLastBeatInt(), 0);
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -59,9 +59,9 @@ public class MusicEditorModelTests {
   @Test
   public void testGetNotes() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -78,11 +78,11 @@ public class MusicEditorModelTests {
   @Test
   public void testPlayConsecutively() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -111,11 +111,11 @@ public class MusicEditorModelTests {
   @Test
   public void testPlaySimultaneously()  {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -139,11 +139,11 @@ public class MusicEditorModelTests {
   @Test
   public void testRenewEdges()  {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 3);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 2 , 7, 7);
+    Note a1 = new Note(Pitch.A, 1, 3, 3);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 2 , 7, 7);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -160,11 +160,11 @@ public class MusicEditorModelTests {
   @Test
   public void testAddNote() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -186,11 +186,11 @@ public class MusicEditorModelTests {
   @Test
   public void testRemoveNote() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -217,10 +217,10 @@ public class MusicEditorModelTests {
   @Test(expected = Exception.class)
   public void testRemoveNoteNotThere() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -239,9 +239,9 @@ public class MusicEditorModelTests {
   public void testDisplaySong(){
     MusicEditorModel m = new MusicEditorModel();
     assertEquals(m.displaySong(), " ");
-    m.addNote(new Note(Note.Pitch.A, 1, 1, 0));
-    m.addNote(new Note(Note.Pitch.Csharp, 1, 4, 2));
-    m.addNote(new Note(Note.Pitch.B, 1, 5, 5));
+    m.addNote(new Note(Pitch.A, 1, 1, 0));
+    m.addNote(new Note(Pitch.Csharp, 1, 4, 2));
+    m.addNote(new Note(Pitch.B, 1, 5, 5));
     assertEquals(m.displaySong(), "   C#1  D1 D#1  E1  F1 F#1  G1 G#1  A1 A#1  B1\n"
       + " 0                                  X        \n"
       + " 1                                           \n"
@@ -253,15 +253,15 @@ public class MusicEditorModelTests {
       + " 7                                          |\n"
       + " 8                                          |\n"
       + " 9                                          |");
-    m.addNote(new Note(Note.Pitch.D, 7, 10, 5));
-    m.addNote(new Note(Note.Pitch.Asharp, 4, 1, 3));
-    m.addNote(new Note(Note.Pitch.Fsharp, 1, 12, 3));
-    m.addNote(new Note(Note.Pitch.C, 4, 1, 3));
-    m.addNote(new Note(Note.Pitch.Dsharp, 1, 1, 3));
-    m.addNote(new Note(Note.Pitch.E, 1, 8, 5));
-    m.addNote(new Note(Note.Pitch.F, 1, 1, 3));
-    m.addNote(new Note(Note.Pitch.G, 1, 4, 5));
-    m.addNote(new Note(Note.Pitch.Gsharp, 1, 2, 3));
+    m.addNote(new Note(Pitch.D, 7, 10, 5));
+    m.addNote(new Note(Pitch.Asharp, 4, 1, 3));
+    m.addNote(new Note(Pitch.Fsharp, 1, 12, 3));
+    m.addNote(new Note(Pitch.C, 4, 1, 3));
+    m.addNote(new Note(Pitch.Dsharp, 1, 1, 3));
+    m.addNote(new Note(Pitch.E, 1, 8, 5));
+    m.addNote(new Note(Pitch.F, 1, 1, 3));
+    m.addNote(new Note(Pitch.G, 1, 4, 5));
+    m.addNote(new Note(Pitch.Gsharp, 1, 2, 3));
     assertEquals(m.displaySong(), "   C#1  D1 D#1  E1  F1 F#1  G1 G#1  A1 A#1  B1  C2 C#2  D2 D#2 "
       + " E2  F2 F#2  G2 G#2  A2 A#2  B2  C3 C#3  D3 D#3  E3  F3 F#3  G3 G#3  A3 A#3  B3  C4 C#4  "
       + "D4 D#4  E4  F4 F#4  G4 G#4  A4 A#4  B4  C5 C#5  D5 D#5  E5  F5 F#5  G5 G#5  A5 A#5  B5  "
@@ -346,9 +346,9 @@ public class MusicEditorModelTests {
   @Test
   public void testGetNotesAtBeat()  {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -366,11 +366,11 @@ public class MusicEditorModelTests {
   @Test
   public void testChangeNoteDuration()  {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -391,11 +391,11 @@ public class MusicEditorModelTests {
   @Test
   public void testChangeNotePitch() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -406,20 +406,20 @@ public class MusicEditorModelTests {
     notes.get(2).add(csharp1);
     notes.put(5, new HashSet<Note>());
     notes.get(5).add(b1);
-    m.changeNotePitch(a1, Note.Pitch.D);
+    m.changeNotePitch(a1, Pitch.D);
     notes.get(0).remove(a1);
-    a1.changePitch(Note.Pitch.D);
+    a1.changePitch(Pitch.D);
     notes.get(0).add(a1);
     assertEquals(m.getNotes(), notes);
   }
 
   @Test
   public void testChangeNoteOctave()  {    MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
@@ -440,11 +440,11 @@ public class MusicEditorModelTests {
   @Test
   public void testChangeNoteStartBeat() {
     MusicEditorModel m = new MusicEditorModel();
-    Note a1 = new Note(Note.Pitch.A, 1, 3, 0);
-    Note csharp1 = new Note(Note.Pitch.Csharp, 1, 4, 2);
-    Note b1 = new Note(Note.Pitch.B, 1, 5, 5);
-    Note d = new Note(Note.Pitch.D, 1 , 3, 0);
-    Note g = new Note(Note.Pitch.Gsharp, 1 , 3, 5);
+    Note a1 = new Note(Pitch.A, 1, 3, 0);
+    Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
+    Note b1 = new Note(Pitch.B, 1, 5, 5);
+    Note d = new Note(Pitch.D, 1 , 3, 0);
+    Note g = new Note(Pitch.Gsharp, 1 , 3, 5);
     m.addNote(a1);
     m.addNote(csharp1);
     m.addNote(b1);
