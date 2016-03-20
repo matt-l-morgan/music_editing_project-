@@ -1,8 +1,11 @@
-package cs3500.music.model;
+package cs3500.music.tests;
 
 /**
- * Created by mattmorgan on 3/17/16.
+ * Created by mattmorgan on 3/20/16.
  */
+import cs3500.music.model.MusicEditorModel;
+import cs3500.music.model.Note;
+import cs3500.music.model.Pitch;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,11 +15,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by mattmorgan on 3/3/16.
- */
-public class MusicEditorModelTests {
-
+public class MusicEditorModelTest {
   @Test
   public void testGetLowestNoteInt()  {
     MusicEditorModel m = new MusicEditorModel();
@@ -41,6 +40,15 @@ public class MusicEditorModelTests {
     m.addNote(csharp1);
     m.addNote(b1);
     assertEquals(m.getHighestNoteInt(), 23);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testEmptyConstructor() {
+    MusicEditorModel m = new MusicEditorModel();
+    assertEquals(m.getHighestNoteInt(), -1);
+    assertEquals(m.getLastBeatInt(), 1);
+    assertEquals(m.getLowestNoteInt(), 500);
+    m.getNotesAtBeat(5);
   }
 
   @Test
@@ -463,4 +471,3 @@ public class MusicEditorModelTests {
     assertEquals(m.getNotes(), notes);
   }
 }
-
