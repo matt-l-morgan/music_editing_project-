@@ -1,7 +1,5 @@
 package cs3500.music.model;
 
-import java.net.PortUnreachableException;
-
 /**
  * Created by mattmorgan on 3/20/16.
  */

@@ -7,7 +7,9 @@ import cs3500.music.model.IMusicEditorModel;
  */
 public class ConsoleView implements MusicView {
 
+  /**pretty prints the music piece to the console*/
   @Override public void display(IMusicEditorModel model) {
-
+    StringBuilder output = new StringBuilder();
+    output.append(model.displaySong());
   }
 }

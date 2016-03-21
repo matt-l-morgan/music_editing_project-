@@ -15,82 +15,81 @@ import java.util.HashSet;
  */
 public interface IMusicEditorModel {
 
-
   /**
    * an add note function for the music player
    */
-  public void addNote(AbstractNote note);
+  void addNote(AbstractNote note);
 
   /**
    * a remove note object for the music player
    */
-  public void removeNote(AbstractNote note);
+  void removeNote(AbstractNote note);
 
   /**
    * a display song fuction for the music player
    * @return a string represention of the notes for this
    * peice of music
    */
-  public String displaySong();
+  String displaySong();
 
   /**
    * mutations a note's duration
    * @param note the note to be changed
    */
-  public void changeNoteDuration(AbstractNote note, int duration);
+  void changeNoteDuration(AbstractNote note, int duration);
 
   /**
    * mutates a note's pitch
    * @param note the note to be changed
    */
-  public void changeNotePitch(AbstractNote note, Pitch pitch);
+  void changeNotePitch(AbstractNote note, Pitch pitch);
 
   /**
    * change's a note's octave
    * @param note the note to be changed
    */
-  public void changeNoteOctave(AbstractNote note, int octave);
+  void changeNoteOctave(AbstractNote note, int octave);
 
   /**
    * changes the starting beat of a note
    */
-  public void changeNoteStartBeat(AbstractNote note, int startBeat);
+  void changeNoteStartBeat(AbstractNote note, int startBeat);
 
   /**
    * gives the integer representation of the lowest note
    * @return the lowest note's pandovalue
    */
-  public int getLowestNoteInt();
+  int getLowestNoteInt();
 
   /**
    * giver the integer representation of the highest value
    * @return the highest note's pandovalue
    */
-  public int getHighestNoteInt();
+  int getHighestNoteInt();
 
   /**
    * getter for lowestBeat
    * @return int this.lowestNoteInt
    */
-  public int getLastBeatInt();
+  int getLastBeatInt();
 
   /**
    * getter for the notes of this model
    * @return the HashMap<Integer, HashSet<Note>>
    */
-  public HashMap<Integer, HashSet<AbstractNote>> getNotes();
+  HashMap<Integer, HashSet<AbstractNote>> getNotes();
 
   /**
    * adds the given models notes to the end of this, models notes
    * @param m the given model who's notes we will play
    */
-  public void playConsecutively(IMusicEditorModel m);
+  void playConsecutively(IMusicEditorModel m);
 
   /**
    * plays this piece of music at the same time as the given model's notes
    * @param m the given model who's notes we will play
    */
-  public void playSimultaneously(IMusicEditorModel m);
+  void playSimultaneously(IMusicEditorModel m);
 
   /**
    * Gets all the notes at a given beat
@@ -98,7 +97,7 @@ public interface IMusicEditorModel {
    * @return a Collection of notes at that beat
    * @throws IllegalArgumentException if beat is less than 0
    */
-  public Collection<AbstractNote> getNotesAtBeat(int beat);
+  Collection<AbstractNote> getNotesAtBeat(int beat);
 
 
 }
