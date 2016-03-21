@@ -8,6 +8,8 @@ package cs3500.music.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import cs3500.music.util.CompositionBuilder;
+
 /**
  * Implementation of the IMUSICEDITOR
  */
@@ -20,6 +22,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
+  private int tempo;
 
   /**
    * zero argument constructor of a MusicEditorModel
@@ -29,6 +32,7 @@ public class MusicEditorModel implements IMusicEditorModel {
     this.lowestNoteInt = 500;
     this.lastBeatInt = 1;
     this.highestNoteInt = -1;
+    this.tempo = 100;
   }
 
 
@@ -316,5 +320,44 @@ public class MusicEditorModel implements IMusicEditorModel {
       throw new IllegalArgumentException("invalid input");
     }
   }
+
+  /**Builder*/
+  public static final class Builder implements CompositionBuilder<IMusicEditorModel> {
+    private MusicEditorModel model1 = new MusicEditorModel();
+
+    @Override
+    public IMusicEditorModel build() {
+      return new MusicEditorModel();
+    }
+
+    @Override
+    public CompositionBuilder<IMusicEditorModel> setTempo(int tempo) {
+      this.model1.tempo = tempo;
+      return this;
+    }
+
+    @Override
+    public CompositionBuilder<IMusicEditorModel> addNote(
+            int start, int end, int instrument, int pitch, int volume) {
+      //need to convert midi input (all ints) to our representation
+      //note 0 2 1 76 64 ->
+      //super(pitch, octave, duration, startbeat, volume, instrument);
+
+      //TODO: have to use pandoValue or math to get pitch/octave from single midi value. With math it would be:
+      /**midiToPitch
+          - midi# / 12
+       and
+       -midiToOctave
+          -midi# mod 12
+
+       (right now I have left Csharp and 1 as placeholders. The only reason I haven't done
+       this is I'm a little confused by how/when we use pandoValue
+       */
+
+      model1.addNote(new Note(Pitch.Csharp, 1, end - start, start, volume, instrument));
+      return this;
+    }
+  }
+
 }
 

@@ -28,7 +28,7 @@ public interface IMusicEditorModel {
   /**
    * a display song fuction for the music player
    * @return a string represention of the notes for this
-   * peice of music
+   * piece of music
    */
   String displaySong();
 
