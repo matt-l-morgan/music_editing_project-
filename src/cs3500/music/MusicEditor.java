@@ -18,32 +18,28 @@ public class MusicEditor {
      */
   }
 
-  public enum ViewType {
-    GuiViewFrame, MidiView, ConsoleView
-  }
-
-  /**select and output the proper type of MusicView for file by delegating to viewType's
+  /**
+   * select and output the proper type of MusicView for file by delegating to viewType's
    * display method via the MusicView interface
    * @param viewType
    * @param file
    */
-  public static void createView(ViewType viewType, Readable file) {
-    if (viewType == ViewType.GuiViewFrame) {
+  public static void createView(String viewType, Readable file) {
+    if (viewType.equals("gui")) {
       GuiViewFrame guiViewFrame = new GuiViewFrame();
-      guiViewFrame.display(file);
+      //guiViewFrame.display(file);
       return;
     }
-    if (viewType == ViewType.MidiView) {
+    if (viewType.equals("midi")) {
       MidiViewImpl midiView = new MidiViewImpl();
-      midiView.display(file);
+      //midiView.display(file);
       return;
     }
-    if (viewType == ViewType.ConsoleView) {
+    if (viewType.equals("console")) {
       ConsoleView consoleView = new ConsoleView();
-      consoleView.display(file);
+      //consoleView.display(file);
       return;
     }
-
     // You probably need to connect these views to your model, too...
   }
 }
