@@ -1,11 +1,13 @@
 package cs3500.music.view;
 
+import cs3500.music.model.IMusicEditorModel;
+
 import javax.sound.midi.*;
 
 /**
  * A skeleton for MIDI playback
  */
-public class MidiViewImpl implements YourViewInterfaceHere {
+public class MidiViewImpl implements MusicView {
   private final Synthesizer synth;
   private final Receiver receiver;
 
@@ -55,5 +57,9 @@ public class MidiViewImpl implements YourViewInterfaceHere {
     this.receiver.send(start, -1);
     this.receiver.send(stop, this.synth.getMicrosecondPosition() + 200000);
     this.receiver.close(); // Only call this once you're done playing *all* notes
+  }
+
+  @Override public void display(IMusicEditorModel model) {
+
   }
 }

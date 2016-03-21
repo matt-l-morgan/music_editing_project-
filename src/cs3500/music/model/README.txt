@@ -29,8 +29,13 @@ MusicEditorModelTest tests the methods of the model
 
 
 CHANGES MADE TO MODEL FOR HW6:
-we made an abstract class for Note called Abstractnote. This allows us to made the IMusicEditorModel
-more abstract and remove our own concrete classes for the methods parameters.
+- we made an abstract class for Note called Abstractnote. This allows us to made the
+IMusicEditorModel more abstract and remove our own concrete classes for the methods parameters.
 
+- We also made a new test in MusicEditorModel called testEmptyConstructor to test different methods
+for an empty piece.
 
+-We also made a new tests file and moved all the model tests there
+
+-We also added volume and Instrument fields to Abstract notes to integrate with midi files
 

@@ -27,6 +27,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   public MusicEditorModel(){
     this.notes = new HashMap<Integer, HashSet<AbstractNote>>();
     this.lowestNoteInt = 500;
+    this.lastBeatInt = 1;
     this.highestNoteInt = -1;
   }
 
