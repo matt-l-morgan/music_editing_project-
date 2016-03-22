@@ -22,7 +22,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
-  private final int tempo;
+  private int tempo;
 
   /**
    * zero argument constructor of a MusicEditorModel
@@ -38,8 +38,8 @@ public class MusicEditorModel implements IMusicEditorModel {
   /**
    * 2 argument constructor of a MusicEditorModel, used in the builder
    */
-  private MusicEditorModel(ArrayList<Note> notes, int tempo){
-    notes.forEach(this::addNote);
+  private MusicEditorModel(HashMap<Integer, HashSet<AbstractNote>> notes, int tempo){
+    //notes.forEach(this::addNote);
     this.lowestNoteInt = 500;
     this.lastBeatInt = 1;
     this.highestNoteInt = -1;
@@ -55,6 +55,11 @@ public class MusicEditorModel implements IMusicEditorModel {
   @Override
   public int getTempo() {
     return this.tempo;
+  }
+
+  @Override
+  public void setTempo(int tempo) {
+    this.tempo = tempo;
   }
 
   /**
@@ -343,19 +348,22 @@ public class MusicEditorModel implements IMusicEditorModel {
   }
 
   public static final class Builder implements CompositionBuilder<IMusicEditorModel>{
-    private ArrayList<Note> notes;
-    private int tempo;
+    private MusicEditorModel model;
+
+    public Builder() {
+      model = new MusicEditorModel();
+    }
 
 
     @Override public IMusicEditorModel build() {
-      return new MusicEditorModel(notes,tempo);
+      return model;
     }
 
     @Override public CompositionBuilder<IMusicEditorModel> setTempo(int tempo) {
       if (tempo < 1) {
         throw new IllegalArgumentException("integer not a valid tempo");
       }
-      this.tempo = tempo;
+      this.model.setTempo(tempo);
       return this;
     }
 
@@ -365,7 +373,7 @@ public class MusicEditorModel implements IMusicEditorModel {
       if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
         throw new IllegalArgumentException("Invalid note.");
       }
-      this.notes.add(
+      this.model.addNote(
         new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start, volume, instrument));
       return this;
     }

@@ -87,6 +87,11 @@ public interface IMusicEditorModel {
    int getTempo();
 
   /**
+   * Sets the tempo of this piece of music
+   */
+  void setTempo(int tempo);
+
+  /**
    * adds the given models notes to the end of this, models notes
    * @param m the given model who's notes we will play
    */

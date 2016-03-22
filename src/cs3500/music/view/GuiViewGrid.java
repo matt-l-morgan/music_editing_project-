@@ -8,7 +8,8 @@ import java.awt.*;
 /**
  * Created by mattmorgan on 3/22/16.
  */
-public class GuiViewGrid extends JPanel {
+
+/*public class GuiViewGrid extends JPanel {
   private final MusicEditorModel model;
 
-}
+}*/

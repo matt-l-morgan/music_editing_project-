@@ -26,7 +26,7 @@ public class MusicEditor {
     Readable readable1 = new FileReader("mary-little-lamb.txt");
     MusicView view1 = MusicViewCreator.create("console");
     MusicReader reader1 = new MusicReader();
-    reader1.parseFile(readable1,  ); //TODO: we cannot instantiate a builder);
+    reader1.parseFile(readable1, new MusicEditorModel.Builder());
 
     //CompositionBuilder<MusicEditor> builder1 = new CompositionBuilder<MusicEditor>();
     //reader1.parseFile(readable1, ); //So, parsefile takes a composition builder
