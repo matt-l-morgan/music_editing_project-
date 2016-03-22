@@ -362,12 +362,13 @@ public class MusicEditorModel implements IMusicEditorModel {
     @Override
     public CompositionBuilder<IMusicEditorModel> addNote(int start, int end, int instrument,
       int pitch, int volume) {
-        if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
-          throw new IllegalArgumentException("Invalid note.");
-        }
-        this.notes.add(new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start,
-          volume, instrument));
-        return this;
+      if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
+        throw new IllegalArgumentException("Invalid note.");
+      }
+      this.notes.add(
+        new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start, volume, instrument));
+      return this;
+    }
   }
 }
 

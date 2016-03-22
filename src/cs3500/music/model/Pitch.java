@@ -61,25 +61,25 @@ public enum Pitch {
       case 0:
         return C;
       case 1:
-        return CSHARP;
+        return Csharp;
       case 2:
         return D;
       case 3:
-        return DSHARP;
+        return Dsharp;
       case 4:
         return E;
       case 5:
         return F;
       case 6:
-        return FSHARP;
+        return Fsharp;
       case 7:
         return G;
       case 8:
-        return GSHARP;
+        return Gsharp;
       case 9:
         return A;
       case 10:
-        return ASHARP;
+        return Asharp;
       case 11:
         return B;
       default:
