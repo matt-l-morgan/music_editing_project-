@@ -80,6 +80,13 @@ public interface IMusicEditorModel {
   HashMap<Integer, HashSet<AbstractNote>> getNotes();
 
   /**
+   * Gets the tempo of this piece of music
+   *
+   * @return the tempo of this piece of music
+   */
+   int getTempo();
+
+  /**
    * adds the given models notes to the end of this, models notes
    * @param m the given model who's notes we will play
    */

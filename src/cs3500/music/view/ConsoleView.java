@@ -11,5 +11,6 @@ public class ConsoleView implements MusicView {
   @Override public void display(IMusicEditorModel model) {
     StringBuilder output = new StringBuilder();
     output.append(model.displaySong());
+    System.out.print(output);
   }
 }

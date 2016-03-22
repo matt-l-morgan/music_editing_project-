@@ -39,3 +39,4 @@ for an empty piece.
 
 -We also added volume and Instrument fields to Abstract notes to integrate with midi files
 
+- also added a tempo field to the model

@@ -5,6 +5,8 @@ package cs3500.music.model;
  */
 
 
+import cs3500.music.util.CompositionBuilder;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
+  private final int tempo;
 
   /**
    * zero argument constructor of a MusicEditorModel
@@ -29,8 +32,30 @@ public class MusicEditorModel implements IMusicEditorModel {
     this.lowestNoteInt = 500;
     this.lastBeatInt = 1;
     this.highestNoteInt = -1;
+    this.tempo = 5000;
   }
 
+  /**
+   * 2 argument constructor of a MusicEditorModel, used in the builder
+   */
+  private MusicEditorModel(ArrayList<Note> notes, int tempo){
+    notes.forEach(this::addNote);
+    this.lowestNoteInt = 500;
+    this.lastBeatInt = 1;
+    this.highestNoteInt = -1;
+    this.tempo = tempo;
+  }
+
+
+  /**
+   * give the tempo of this piece of music
+   *
+   * @return the int tempo of this music
+   */
+  @Override
+  public int getTempo() {
+    return this.tempo;
+  }
 
   /**
    * getter for lowestnote
@@ -315,6 +340,34 @@ public class MusicEditorModel implements IMusicEditorModel {
     else {
       throw new IllegalArgumentException("invalid input");
     }
+  }
+
+  public static final class Builder implements CompositionBuilder<IMusicEditorModel>{
+    private ArrayList<Note> notes;
+    private int tempo;
+
+
+    @Override public IMusicEditorModel build() {
+      return new MusicEditorModel(notes,tempo);
+    }
+
+    @Override public CompositionBuilder<IMusicEditorModel> setTempo(int tempo) {
+      if (tempo < 1) {
+        throw new IllegalArgumentException("integer not a valid tempo");
+      }
+      this.tempo = tempo;
+      return this;
+    }
+
+    @Override
+    public CompositionBuilder<IMusicEditorModel> addNote(int start, int end, int instrument,
+      int pitch, int volume) {
+        if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
+          throw new IllegalArgumentException("Invalid note.");
+        }
+        this.notes.add(new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start,
+          volume, instrument));
+        return this;
   }
 }
 
