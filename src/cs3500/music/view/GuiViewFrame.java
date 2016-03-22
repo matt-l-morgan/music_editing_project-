@@ -24,10 +24,10 @@ public class GuiViewFrame extends javax.swing.JFrame implements MusicView {
     this.pack();
   }
 
-  @Override
+  /*@Override
   public void initialize(){
     this.setVisible(true);
-  }
+  }*/
 
   @Override
   public Dimension getPreferredSize(){

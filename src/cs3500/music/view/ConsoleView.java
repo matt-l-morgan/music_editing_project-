@@ -9,7 +9,7 @@ public class ConsoleView implements MusicView {
 
   /**pretty prints the music piece to the console*/
   @Override public void display(IMusicEditorModel model) {
-    StringBuilder output = new StringBuilder();
-    output.append(model.displaySong());
+    //StringBuilder output = new StringBuilder();
+    System.out.print(model.displaySong());
   }
 }

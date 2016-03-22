@@ -1,6 +1,7 @@
 package cs3500.music;
 
 import cs3500.music.model.MusicEditorModel;
+import cs3500.music.util.CompositionBuilder;
 import cs3500.music.util.MusicReader;
 import cs3500.music.view.ConsoleView;
 import cs3500.music.view.GuiViewFrame;
@@ -24,6 +25,11 @@ public class MusicEditor {
     MusicEditorModel model1 = new MusicEditorModel();
     Readable readable1 = new FileReader("mary-little-lamb.txt");
     MusicView view1 = MusicViewCreator.create("console");
+    MusicReader reader1 = new MusicReader();
+    reader1.parseFile(readable1,  ); //TODO: we cannot instantiate a builder);
+
+    //CompositionBuilder<MusicEditor> builder1 = new CompositionBuilder<MusicEditor>();
+    //reader1.parseFile(readable1, ); //So, parsefile takes a composition builder
     view1.display(model1);
   }
 }

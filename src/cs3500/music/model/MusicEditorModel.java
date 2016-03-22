@@ -323,11 +323,11 @@ public class MusicEditorModel implements IMusicEditorModel {
 
   /**Builder*/
   public static final class Builder implements CompositionBuilder<IMusicEditorModel> {
-    private MusicEditorModel model1 = new MusicEditorModel();
+    private MusicEditorModel model1 = new MusicEditorModel(); //TODO: wrong
 
     @Override
     public IMusicEditorModel build() {
-      return new MusicEditorModel();
+      return model1;
     }
 
     @Override
