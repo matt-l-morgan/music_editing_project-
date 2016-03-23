@@ -11,13 +11,17 @@ public class MidiViewImpl implements MusicView {
   private final Receiver receiver;
 
   public MidiViewImpl() {
+    Synthesizer synth = null;
+    Receiver rec = null;
     try {
-      this.synth = MidiSystem.getSynthesizer();
-      this.receiver = synth.getReceiver();
-      this.synth.open();
+      synth = MidiSystem.getSynthesizer();
+      rec = synth.getReceiver();
+      synth.open();
     } catch (MidiUnavailableException e) {
       e.printStackTrace();
     }
+    this.synth = synth;
+    this.receiver = rec;
   }
   *//**
    * Relevant classes and methods from the javax.sound.midi library:
