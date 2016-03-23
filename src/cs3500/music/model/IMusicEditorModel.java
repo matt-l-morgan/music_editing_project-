@@ -110,11 +110,4 @@ public interface IMusicEditorModel {
    * @throws IllegalArgumentException if beat is less than 0
    */
   Collection<AbstractNote> getNotesAtBeat(int beat);
-
-  /**
-   * Gets all the notes at a given beat
-   * @return a Collection of notes at that beat
-   * @throws IllegalArgumentException if beat is less than 0
-   */
-  Collection<AbstractNote> getNotesAsCollection();
 }

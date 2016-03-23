@@ -22,7 +22,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
-  private final int tempo;
+  private int tempo;
 
   /**
    * zero argument constructor of a MusicEditorModel
@@ -52,6 +52,11 @@ public class MusicEditorModel implements IMusicEditorModel {
   @Override
   public int getTempo() {
     return this.tempo;
+  }
+
+  @Override
+  public void setTempo(int tempo) {
+    this.tempo = tempo;
   }
 
   /**

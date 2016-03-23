@@ -31,7 +31,7 @@ public class MidiViewImpl implements MusicView {
 
   /**Mock MidiView Constructor*/
   public MidiViewImpl(String mock) {
-    MusicViewTest.MockSynthesizer synth = null;
+    MusicViewTest.MockSynthesizer synth = new MusicViewTest.MockSynthesizer();
     MusicViewTest.MockReceiver receiver = null;
 
     synth = synth.getSynthesizer();
