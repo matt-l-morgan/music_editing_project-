@@ -54,7 +54,7 @@ public class MusicEditorModelTest {
   @Test
   public void testGetLastBeatInt()  {
     MusicEditorModel m = new MusicEditorModel();
-    assertEquals(m.getLastBeatInt(), 0);
+    assertEquals(m.getLastBeatInt(), 1);
     Note a1 = new Note(Pitch.A, 1, 3, 0);
     Note csharp1 = new Note(Pitch.Csharp, 1, 4, 2);
     Note b1 = new Note(Pitch.B, 1, 5, 5);
@@ -246,7 +246,7 @@ public class MusicEditorModelTest {
   @org.junit.Test
   public void testDisplaySong(){
     MusicEditorModel m = new MusicEditorModel();
-    assertEquals(m.displaySong(), " ");
+    assertEquals(m.displaySong(), 0);
     m.addNote(new Note(Pitch.A, 1, 1, 0));
     m.addNote(new Note(Pitch.Csharp, 1, 4, 2));
     m.addNote(new Note(Pitch.B, 1, 5, 5));

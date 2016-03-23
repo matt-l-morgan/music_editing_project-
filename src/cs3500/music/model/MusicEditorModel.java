@@ -18,32 +18,28 @@ public class MusicEditorModel implements IMusicEditorModel {
    * an Hashmap of the notes where the key is
    * the beat and the set is the notes at that beat
    */
-  private HashMap<Integer, HashSet<AbstractNote>> notes;
+  private HashMap<Integer, HashSet<AbstractNote>> notes = new HashMap<>();
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
-  /**tempo, expressed in microseconds per beat*/
-  private int tempo;
+  private final int tempo;
 
   /**
    * zero argument constructor of a MusicEditorModel
    */
   public MusicEditorModel(){
     this.notes = new HashMap<Integer, HashSet<AbstractNote>>();
+    this.highestNoteInt = -1;
     this.lowestNoteInt = 500;
     this.lastBeatInt = 1;
-    this.highestNoteInt = -1;
     this.tempo = 5000;
   }
 
   /**
    * 2 argument constructor of a MusicEditorModel, used in the builder
    */
-  private MusicEditorModel(HashMap<Integer, HashSet<AbstractNote>> notes, int tempo){
-    //notes.forEach(this::addNote);
-    this.lowestNoteInt = 500;
-    this.lastBeatInt = 1;
-    this.highestNoteInt = -1;
+  private MusicEditorModel(ArrayList<AbstractNote> notes, int tempo){
+    notes.forEach(this::addNote);
     this.tempo = tempo;
   }
 
@@ -56,11 +52,6 @@ public class MusicEditorModel implements IMusicEditorModel {
   @Override
   public int getTempo() {
     return this.tempo;
-  }
-
-  @Override
-  public void setTempo(int tempo) {
-    this.tempo = tempo;
   }
 
   /**
@@ -212,23 +203,23 @@ public class MusicEditorModel implements IMusicEditorModel {
 
 
   /**
-   * creates a row to add to the console display
+   * creates a row to add to the consol display
    * HELPER for DisplaySong
    * @param beat the beat to make a row up
    * @return a string for that row
    */
   private String createRow(int beat) {
-    Collection notesAtBeat = this.getNotesAtBeat(beat);
-    int buffer = 4 * (this.getHighestNoteInt() - this.getLowestNoteInt()) + 2;
-    StringBuilder finished = new StringBuilder(String.format("%" + buffer + "s", new Object[]{""}));
+    Collection<AbstractNote> notesAtBeat = this.getNotesAtBeat(beat);
+    int buffer = (4 * (this.getHighestNoteInt() - this.getLowestNoteInt())) + 2;
+    StringBuilder finished = new StringBuilder(String.format("%" + buffer + "s", ""));
 
-    for (Object a : notesAtBeat) {
+    for (AbstractNote a : notesAtBeat) {
       Note n = (Note) a;
-      int index = 4 * (n.getPandoValue() - this.getLowestNoteInt()) + 1;
+      int index = (4 * (n.getPandoValue() - this.getLowestNoteInt())) + 1;
       if (n.getStartbeat() == beat) {
         finished.setCharAt(index, 'X');
-      } else if (beat > n.getStartbeat() && beat < n.getStartbeat() + n.getDuration()
-        && finished.charAt(index) != 88) {
+      } else if (beat > n.getStartbeat() && beat < n.getStartbeat() + n.getDuration()  &&
+        finished.charAt(index) != 88) {
         finished.setCharAt(index, '|');
       }
     }
@@ -257,22 +248,6 @@ public class MusicEditorModel implements IMusicEditorModel {
       return Collections.unmodifiableSet(finished);
     }
   }
-
-  /**
-   * Gets all the notes
-   * @return a Collection of notes at that beat
-   * @throws IllegalArgumentException if beat is less than 0
-   */
-  public Collection<AbstractNote> getNotesAsCollection() throws IllegalArgumentException {
-      HashSet<AbstractNote> finished = new HashSet<AbstractNote>();
-
-      for (HashSet<AbstractNote> set : this.notes.values()) {
-        HashSet<AbstractNote> new_set = set.stream().
-                        collect(Collectors.toCollection(HashSet<AbstractNote>::new));
-        finished.addAll(new_set);
-      }
-      return Collections.unmodifiableSet(finished);
-    }
 
   /**
    * alters the given beat by changing it's duratoin
@@ -365,35 +340,28 @@ public class MusicEditorModel implements IMusicEditorModel {
   }
 
   public static final class Builder implements CompositionBuilder<IMusicEditorModel>{
-    private MusicEditorModel model;
-
-    public Builder() {
-      model = new MusicEditorModel();
-    }
-
+    private ArrayList<AbstractNote> notes = new ArrayList<AbstractNote>();
+    private int tempo;
 
     @Override public IMusicEditorModel build() {
-      return model;
+      return new MusicEditorModel(notes,tempo);
     }
 
     @Override public CompositionBuilder<IMusicEditorModel> setTempo(int tempo) {
       if (tempo < 1) {
         throw new IllegalArgumentException("integer not a valid tempo");
       }
-      this.model.setTempo(tempo);
+      this.tempo = tempo;
       return this;
     }
 
     @Override
-    /**converts from MIDI representation of notes to our representation*/
     public CompositionBuilder<IMusicEditorModel> addNote(int start, int end, int instrument,
       int pitch, int volume) {
       if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
         throw new IllegalArgumentException("Invalid note.");
       }
-      this.model.addNote(
-              //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
-        new Note(Pitch.toPitch(pitch % 12), (pitch / 12) - 1, end - start, start, volume, instrument));
+      this.notes.add(new Note(Pitch.toPitch(pitch % 12), (pitch / 12), (end - start), start, volume, instrument));
       return this;
     }
   }
