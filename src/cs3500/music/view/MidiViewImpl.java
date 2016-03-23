@@ -84,9 +84,9 @@ public class MidiViewImpl implements MusicView {
           throws InvalidMidiDataException {
     MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, instrument, volume, pitch);
     MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, instrument, volume, pitch);
-    this.receiver.send(start, this.synth.getMicrosecondPosition() + begin * 200000); //200000 should be tempo
+    this.receiver.send(start, begin * 200000); //200000 should be tempo
     System.out.print(pitch + "\n");
-    this.receiver.send(stop, this.synth.getMicrosecondPosition() + end * 200000);
+    this.receiver.send(stop, end * 200000);
   }
 
   /**converts from our representation of notes to the MIDI representation.
@@ -98,8 +98,10 @@ public class MidiViewImpl implements MusicView {
   //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
   @Override public void display(IMusicEditorModel model) {
 
-    System.out.println("size" + model.getNotesAsCollection().size());
+    int counter = 0;
       for (AbstractNote note : model.getNotesAsCollection()) {
+        counter++;
+        //System.out.print(counter);
         try {
           playNote(note.getStartbeat(),
                   note.getDuration() + note.getStartbeat(),
@@ -107,6 +109,7 @@ public class MidiViewImpl implements MusicView {
                   note.getVolume(),
             note.getPitch().ordinal() + (note.getOctave() + 1) * 12);
         } catch (InvalidMidiDataException e) {
+
           e.printStackTrace();
         }
       }
