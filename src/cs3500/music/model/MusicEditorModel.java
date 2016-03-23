@@ -22,6 +22,7 @@ public class MusicEditorModel implements IMusicEditorModel {
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
+  /**tempo, expressed in microseconds per beat*/
   private int tempo;
 
   /**

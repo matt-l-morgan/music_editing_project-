@@ -4,6 +4,7 @@ import cs3500.music.model.AbstractNote;
 import cs3500.music.model.IMusicEditorModel;
 import cs3500.music.model.Note;
 import cs3500.music.model.Pitch;
+import cs3500.music.tests.MusicViewTest;
 
 import javax.sound.midi.*;
 
@@ -27,6 +28,16 @@ public class MidiViewImpl implements MusicView {
     this.synth = synth;
     this.receiver = rec;
   }
+
+  /**Mock MidiView Constructor*/
+  public MidiViewImpl(String mock) {
+    MusicViewTest.MockSynthesizer synth = null;
+    MusicViewTest.MockReceiver receiver = null;
+
+    synth = synth.getSynthesizer();
+    receiver = receiver.getReceiver();
+  }
+
   /*
    * Relevant classes and methods from the javax.sound.midi library:
    * <ul>
@@ -57,36 +68,13 @@ public class MidiViewImpl implements MusicView {
    *   https://en.wikipedia.org/wiki/General_MIDI
    *   </a>
    */
-
-  /*the correct notes are stored in the model, so we could convert them back to midi
-  and send them to the synth, or we could just call the midi song directly somehow.
-
-  Then send notes to receiver with playNote and  use Thread.sleep(time to play song in ms)
-  to keep the stream open long enough to play the track
-
-  1. convert notes in model back to midi
-  2. .send each note to receiver
-  3. set start and stops / handle tempo (???)
-  4. use Thread.sleep(# milliseconds: based on model.getHighestNote() and tempo)
-   to keep the stream open long enough for the notes to actually play back
-  5. close the stream
-
-  Can we start by sending a single note and getting it to playback? OK cool
-  What is that note?
-
-  It's not quite clear how to put instrument, pitch, and volume into shortmessage as data byte
-
-  But we can start by displaying: for note in model.getNotes,
-  playNote(start, duration, instrument, pitch, volume)
-   */
-
-  public void playNote(int begin, int end, int instrument, int volume, int pitch)
+  public void playNote(int begin, int end, int instrument, int volume, int pitch, int tempo)
           throws InvalidMidiDataException {
     MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, instrument, pitch, volume);
     MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, instrument, pitch, volume);
-    this.receiver.send(start, begin * 200000);
+    this.receiver.send(start, begin * tempo);
     System.out.print(pitch + "\n");
-    this.receiver.send(stop, synth.getMicrosecondPosition() + (end - begin) * 200000); //200000 should be tempo
+    this.receiver.send(stop, end * tempo); //this line is wrong
   }
 
   /**converts from our representation of notes to the MIDI representation.
@@ -97,7 +85,7 @@ public class MidiViewImpl implements MusicView {
   /**play each note in the piece*/
   //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
   @Override public void display(IMusicEditorModel model) {
-      for (int i = 0; i < model.getHighestNoteInt(); i++) {
+      for (int i = 0; i < model.getLastBeatInt() + 1; i++) {
         for (AbstractNote note : model.getNotesAtBeat(i)) {
           if (note.getStartbeat() == i) {
             try {
@@ -105,7 +93,8 @@ public class MidiViewImpl implements MusicView {
                       note.getDuration() + note.getStartbeat(),
                       note.getInstrument(),
                       note.getVolume(),
-                      note.getPitch().ordinal() + (note.getOctave() + 1) * 12);
+                      note.getPitch().ordinal() + (note.getOctave() + 1) * 12,
+                      model.getTempo());
             } catch (InvalidMidiDataException e) {
 
               e.printStackTrace();
@@ -115,7 +104,7 @@ public class MidiViewImpl implements MusicView {
       }
 
     try {
-      Thread.sleep(20000); //TODO: math...f(tempo, model.getHighestNoteInt())
+      Thread.sleep((model.getLastBeatInt() + 1) * model.getTempo() / 1000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
