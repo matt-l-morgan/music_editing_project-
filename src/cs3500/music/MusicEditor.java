@@ -27,7 +27,6 @@ public class MusicEditor {
     MusicView console_view = MusicViewCreator.create("console");
     MusicView midi_view = MusicViewCreator.create("midi");
     MusicView gui_view = MusicViewCreator.create("gui");
-    System.out.print(builder.build().getNotes());
 
     if (args[1] == "midi") {
       midi_view.display(builder.build());
