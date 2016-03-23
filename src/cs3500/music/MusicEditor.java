@@ -21,18 +21,21 @@ public class MusicEditor {
      */
     CompositionBuilder<IMusicEditorModel> builder = new MusicEditorModel.Builder();
     MusicReader.parseFile(new FileReader(args[0]), builder);
-    MusicView console_view = MusicViewCreator.create("console");
-    MusicView midi_view = MusicViewCreator.create("midi");
-    MusicView gui_view = MusicViewCreator.create("gui");
 
     if (args[1].equals("midi") ) {
+      MusicView midi_view = MusicViewCreator.create("midi");
       midi_view.display(builder.build());
     }
     else if (args[1].equals("console")){
+      MusicView console_view = MusicViewCreator.create("console");
       console_view.display(builder.build());
     }
     else if (args[1].equals("gui")) {
+      MusicView gui_view = MusicViewCreator.create("gui");
       gui_view.display(builder.build());
+    }
+    else {
+      throw new IllegalArgumentException("invalid view type");
     }
   }
 }
