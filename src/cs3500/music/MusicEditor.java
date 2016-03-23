@@ -22,20 +22,21 @@ public class MusicEditor {
     "console" will produce the text output above, and running it with arguments "mystery-1.txt"
      and "midi" will play the first mystery file via MIDI.
      */
-    CompositionBuilder<IMusicEditorModel> builder = new MusicEditorModel.Builder();
-    MusicReader.parseFile(new FileReader(args[0]), builder);
+
+    Readable readable1 = new FileReader(args[0]);
+    IMusicEditorModel model1 = MusicReader.parseFile(readable1, new MusicEditorModel.Builder());
     MusicView console_view = MusicViewCreator.create("console");
     MusicView midi_view = MusicViewCreator.create("midi");
     MusicView gui_view = MusicViewCreator.create("gui");
 
-    if (args[1] == "midi") {
-      midi_view.display(builder.build());
+    if (args[1].equals("midi")) {
+      midi_view.display(model1);
     }
-    else if (args[1] == "console"){
-      console_view.display(builder.build());
+    else if (args[1].equals("console")) {
+      console_view.display(model1);
     }
-    else if (args[1] == "gui") {
-      gui_view.display(builder.build());
+    else if (args[1].equals("gui")) {
+      gui_view.display(model1);
     }
   }
 }
