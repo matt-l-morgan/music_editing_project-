@@ -82,11 +82,11 @@ public class MidiViewImpl implements MusicView {
 
   public void playNote(int begin, int end, int instrument, int volume, int pitch)
           throws InvalidMidiDataException {
-    MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, instrument, volume, pitch);
-    MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, instrument, volume, pitch);
-    this.receiver.send(start, begin * 200000); //200000 should be tempo
+    MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, instrument, pitch, volume);
+    MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, instrument, pitch, volume);
+    this.receiver.send(start, begin * 200000);
     System.out.print(pitch + "\n");
-    this.receiver.send(stop, end * 200000);
+    this.receiver.send(stop, synth.getMicrosecondPosition() + (end - begin) * 200000); //200000 should be tempo
   }
 
   /**converts from our representation of notes to the MIDI representation.
@@ -97,20 +97,20 @@ public class MidiViewImpl implements MusicView {
   /**play each note in the piece*/
   //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
   @Override public void display(IMusicEditorModel model) {
+      for (int i = 0; i < model.getHighestNoteInt(); i++) {
+        for (AbstractNote note : model.getNotesAtBeat(i)) {
+          if (note.getStartbeat() == i) {
+            try {
+              playNote(note.getStartbeat(),
+                      note.getDuration() + note.getStartbeat(),
+                      note.getInstrument(),
+                      note.getVolume(),
+                      note.getPitch().ordinal() + (note.getOctave() + 1) * 12);
+            } catch (InvalidMidiDataException e) {
 
-    int counter = 0;
-      for (AbstractNote note : model.getNotesAsCollection()) {
-        counter++;
-        //System.out.print(counter);
-        try {
-          playNote(note.getStartbeat(),
-                  note.getDuration() + note.getStartbeat(),
-                  note.getInstrument(),
-                  note.getVolume(),
-            note.getPitch().ordinal() + (note.getOctave() + 1) * 12);
-        } catch (InvalidMidiDataException e) {
-
-          e.printStackTrace();
+              e.printStackTrace();
+            }
+          }
         }
       }
 
