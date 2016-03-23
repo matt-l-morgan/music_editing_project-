@@ -211,7 +211,7 @@ public class MusicEditorModel implements IMusicEditorModel {
 
 
   /**
-   * creates a row to add to the consol display
+   * creates a row to add to the console display
    * HELPER for DisplaySong
    * @param beat the beat to make a row up
    * @return a string for that row
@@ -256,6 +256,22 @@ public class MusicEditorModel implements IMusicEditorModel {
       return Collections.unmodifiableSet(finished);
     }
   }
+
+  /**
+   * Gets all the notes
+   * @return a Collection of notes at that beat
+   * @throws IllegalArgumentException if beat is less than 0
+   */
+  public Collection<AbstractNote> getNotesAsCollection() throws IllegalArgumentException {
+      HashSet<AbstractNote> finished = new HashSet<AbstractNote>();
+
+      for (HashSet<AbstractNote> set : this.notes.values()) {
+        HashSet<AbstractNote> new_set = set.stream().
+                        collect(Collectors.toCollection(HashSet<AbstractNote>::new));
+        finished.addAll(new_set);
+      }
+      return Collections.unmodifiableSet(finished);
+    }
 
   /**
    * alters the given beat by changing it's duratoin
@@ -368,13 +384,15 @@ public class MusicEditorModel implements IMusicEditorModel {
     }
 
     @Override
+    /**converts from MIDI representation of notes to our representation*/
     public CompositionBuilder<IMusicEditorModel> addNote(int start, int end, int instrument,
       int pitch, int volume) {
       if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
         throw new IllegalArgumentException("Invalid note.");
       }
       this.model.addNote(
-        new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start, volume, instrument));
+              //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
+        new Note(Pitch.toPitch(pitch % 12), (pitch / 12) - 1, end - start, start, volume, instrument));
       return this;
     }
   }

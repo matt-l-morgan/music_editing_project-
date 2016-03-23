@@ -26,8 +26,8 @@ public interface IMusicEditorModel {
   void removeNote(AbstractNote note);
 
   /**
-   * a display song fuction for the music player
-   * @return a string represention of the notes for this
+   * a display song function for the music player
+   * @return a string representation of the notes for this
    * piece of music
    */
   String displaySong();
@@ -111,5 +111,10 @@ public interface IMusicEditorModel {
    */
   Collection<AbstractNote> getNotesAtBeat(int beat);
 
-
+  /**
+   * Gets all the notes at a given beat
+   * @return a Collection of notes at that beat
+   * @throws IllegalArgumentException if beat is less than 0
+   */
+  Collection<AbstractNote> getNotesAsCollection();
 }
