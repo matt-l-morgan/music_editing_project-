@@ -26,7 +26,8 @@ public final class MusicEditorBuilder implements MusicView {
     }
 
     @Override
-    public CompositionBuilder<MusicView> addNote(int start, int end, int instrument, int pitch, int volume) {
+    public CompositionBuilder<MusicView> addNote(int start, int end, int instrument,
+      int pitch, int volume) {
       return null;
     }
   }

@@ -3,9 +3,6 @@ package cs3500.music;
 
 import cs3500.music.util.CompositionBuilder;
 import cs3500.music.util.MusicReader;
-import cs3500.music.view.ConsoleView;
-import cs3500.music.view.GuiViewFrame;
-import cs3500.music.view.MidiViewImpl;
 import cs3500.music.view.MusicView;
 import cs3500.music.view.MusicViewCreator;
 import cs3500.music.model.*;
@@ -28,13 +25,13 @@ public class MusicEditor {
     MusicView midi_view = MusicViewCreator.create("midi");
     MusicView gui_view = MusicViewCreator.create("gui");
 
-    if (args[1] == "midi") {
+    if (args[1].equals("midi") ) {
       midi_view.display(builder.build());
     }
-    else if (args[1] == "console"){
+    else if (args[1].equals("console")){
       console_view.display(builder.build());
     }
-    else if (args[1] == "gui") {
+    else if (args[1].equals("gui")) {
       gui_view.display(builder.build());
     }
   }

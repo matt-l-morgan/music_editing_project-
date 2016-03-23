@@ -18,7 +18,7 @@ public class Note extends AbstractNote {
    * constructor for a note
    * same as the Abstract notes
    */
-  public Note(Pitch pitch, int octave, int duration, int startbeat, int volume, int instument){
-    super(pitch, octave, duration, startbeat, volume, instument);
+  public Note(Pitch pitch, int octave, int duration, int startbeat, int volume, int instrument){
+    super(pitch, octave, duration, startbeat, volume, instrument);
   }
 }

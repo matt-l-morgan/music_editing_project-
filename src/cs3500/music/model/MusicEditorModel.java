@@ -18,7 +18,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * an Hashmap of the notes where the key is
    * the beat and the set is the notes at that beat
    */
-  private HashMap<Integer, HashSet<AbstractNote>> notes;
+  private HashMap<Integer, HashSet<AbstractNote>> notes = new HashMap<>();
   private int lowestNoteInt;
   private int highestNoteInt;
   private int lastBeatInt;
@@ -29,20 +29,17 @@ public class MusicEditorModel implements IMusicEditorModel {
    */
   public MusicEditorModel(){
     this.notes = new HashMap<Integer, HashSet<AbstractNote>>();
+    this.highestNoteInt = -1;
     this.lowestNoteInt = 500;
     this.lastBeatInt = 1;
-    this.highestNoteInt = -1;
     this.tempo = 5000;
   }
 
   /**
    * 2 argument constructor of a MusicEditorModel, used in the builder
    */
-  private MusicEditorModel(ArrayList<Note> notes, int tempo){
+  private MusicEditorModel(ArrayList<AbstractNote> notes, int tempo){
     notes.forEach(this::addNote);
-    this.lowestNoteInt = 500;
-    this.lastBeatInt = 1;
-    this.highestNoteInt = -1;
     this.tempo = tempo;
   }
 
@@ -212,17 +209,17 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @return a string for that row
    */
   private String createRow(int beat) {
-    Collection notesAtBeat = this.getNotesAtBeat(beat);
-    int buffer = 4 * (this.getHighestNoteInt() - this.getLowestNoteInt()) + 2;
-    StringBuilder finished = new StringBuilder(String.format("%" + buffer + "s", new Object[]{""}));
+    Collection<AbstractNote> notesAtBeat = this.getNotesAtBeat(beat);
+    int buffer = (4 * (this.getHighestNoteInt() - this.getLowestNoteInt())) + 2;
+    StringBuilder finished = new StringBuilder(String.format("%" + buffer + "s", ""));
 
-    for (Object a : notesAtBeat) {
+    for (AbstractNote a : notesAtBeat) {
       Note n = (Note) a;
-      int index = 4 * (n.getPandoValue() - this.getLowestNoteInt()) + 1;
+      int index = (4 * (n.getPandoValue() - this.getLowestNoteInt())) + 1;
       if (n.getStartbeat() == beat) {
         finished.setCharAt(index, 'X');
-      } else if (beat > n.getStartbeat() && beat < n.getStartbeat() + n.getDuration()
-        && finished.charAt(index) != 88) {
+      } else if (beat > n.getStartbeat() && beat < n.getStartbeat() + n.getDuration()  &&
+        finished.charAt(index) != 88) {
         finished.setCharAt(index, '|');
       }
     }
@@ -343,9 +340,8 @@ public class MusicEditorModel implements IMusicEditorModel {
   }
 
   public static final class Builder implements CompositionBuilder<IMusicEditorModel>{
-    private ArrayList<Note> notes;
+    private ArrayList<AbstractNote> notes = new ArrayList<AbstractNote>();
     private int tempo;
-
 
     @Override public IMusicEditorModel build() {
       return new MusicEditorModel(notes,tempo);
@@ -365,8 +361,7 @@ public class MusicEditorModel implements IMusicEditorModel {
       if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
         throw new IllegalArgumentException("Invalid note.");
       }
-      this.notes.add(
-        new Note(Pitch.toPitch(pitch % 12), pitch / 12, end - start, start, volume, instrument));
+      this.notes.add(new Note(Pitch.toPitch(pitch % 12), (pitch / 12), (end - start), start, volume, instrument));
       return this;
     }
   }
