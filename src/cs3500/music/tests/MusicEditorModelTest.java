@@ -15,7 +15,11 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
+/**
+ * tests the model
+ */
 public class MusicEditorModelTest {
+
   @Test
   public void testGetLowestNoteInt()  {
     MusicEditorModel m = new MusicEditorModel();

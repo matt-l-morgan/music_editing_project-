@@ -13,6 +13,11 @@ import java.io.FileReader;
 /**
  * Created by mattmorgan on 3/23/16.
  */
+
+
+/**
+ * tests the midiView using mocks
+ */
 public class MidiViewTest {
 
   /**

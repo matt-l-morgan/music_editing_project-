@@ -25,6 +25,11 @@ public class MockReceiver implements Receiver {
     return this;
   }
 
+  /**
+   * every call to send we add a new log the the Stringbuild in the view with the note's volume
+   * @param message the ShortMessage of the note
+   * @param timeStamp timestamp of the note
+   */
   @Override
   public void send(MidiMessage message, long timeStamp) {
     byte[] mess;

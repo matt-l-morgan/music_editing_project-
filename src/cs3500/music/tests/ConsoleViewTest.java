@@ -9,6 +9,11 @@ import javax.sound.midi.InvalidMidiDataException;
 /**
  * Created by mattmorgan on 3/23/16.
  */
+
+
+/**
+ * test the console view of a piece of music my matching Outputstreams with what we expect
+ */
 public class ConsoleViewTest {
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
   @Before
@@ -21,6 +26,9 @@ public class ConsoleViewTest {
     System.setOut(null);
   }
 
+  /**
+   * test mary had a little lamb in the consol view
+   */
   @Test
   public void testConsoleView() {
     String[] inputs = new String[2];

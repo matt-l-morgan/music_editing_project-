@@ -2,11 +2,7 @@ package cs3500.music.view;
 
 import cs3500.music.model.AbstractNote;
 import cs3500.music.model.IMusicEditorModel;
-import cs3500.music.model.Note;
-import cs3500.music.model.Pitch;
-import cs3500.music.tests.MockReceiver;
 import cs3500.music.tests.MockSynthesizer;
-import cs3500.music.tests.MusicViewTest;
 
 import javax.sound.midi.*;
 

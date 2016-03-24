@@ -120,6 +120,11 @@ public class MockSynthesizer implements Synthesizer{
     return 0;
   }
 
+  /**
+   * returns a new midi Receiver
+   * @return MockReciever
+   * @throws MidiUnavailableException if unavailable
+   */
   @Override public Receiver getReceiver() throws MidiUnavailableException {
     return new MockReceiver();
   }
