@@ -5,6 +5,7 @@ import cs3500.music.model.IMusicEditorModel;
 import cs3500.music.model.Note;
 import cs3500.music.model.Pitch;
 import cs3500.music.tests.MockReceiver;
+import cs3500.music.tests.MockSynthesizer;
 import cs3500.music.tests.MusicViewTest;
 
 import javax.sound.midi.*;
@@ -15,6 +16,7 @@ import javax.sound.midi.*;
 public class MidiViewImpl implements MusicView {
   private Synthesizer synth; //TODO: may have introduced variant making non-final, but it compiles
   private Receiver receiver;
+  public static StringBuilder result = new StringBuilder("");
 
   public MidiViewImpl() {
     Synthesizer synth = null;
@@ -30,15 +32,26 @@ public class MidiViewImpl implements MusicView {
     this.receiver = rec;
   }
 
-  /**Mock MidiView Constructor*/
-  public MidiViewImpl(String mock) {
-
-    //MockReceiver receiver = new MockReceiver();
-    /*MusicViewTest.MockSynthesizer synth = new MusicViewTest.MockSynthesizer();
-    MusicViewTest.MockReceiver receiver = new MusicViewTest.MockReceiver();
-
-    synth = synth.getSynthesizer();
-    receiver = receiver.getReceiver();*/
+  public MidiViewImpl(StringBuilder result){
+/*    this.synth = new MockSynthesizer();
+    try {
+      this.receiver = this.synth.getReceiver();
+    } catch (MidiUnavailableException e) {
+      e.printStackTrace();
+    }
+    this.result = result;
+  }*/
+    Synthesizer synth = null;
+    Receiver rec = null;
+    try {
+      synth = new MockSynthesizer();
+      rec = synth.getReceiver();
+      synth.open();
+    } catch (MidiUnavailableException e) {
+      e.printStackTrace();
+    }
+    this.synth = synth;
+    this.receiver = rec;
   }
 
   /*
@@ -76,8 +89,7 @@ public class MidiViewImpl implements MusicView {
     MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, instrument, pitch, volume);
     MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, instrument, pitch, volume);
     this.receiver.send(start, begin * tempo);
-    System.out.print(pitch + "\n");
-    this.receiver.send(stop, end * tempo); //this line is wrong
+    this.receiver.send(stop, end * tempo);
   }
 
   /**converts from our representation of notes to the MIDI representation.

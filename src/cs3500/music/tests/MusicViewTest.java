@@ -57,12 +57,6 @@ public class MusicViewTest {
    5. Create a StringBuilder, pass it to the mock-synth, then read out the contents ---
    of the StringBuilder to confirm that you've played all the right notes
    */
-  @Test
-  public void testMidiView() {
-    CompositionBuilder<IMusicEditorModel> builder = new MusicEditorModel.Builder();
-    MusicReader.parseFile(new FileReader("mary-little-lamb.txt"), builder);
-    MusicView midi_view = MusicViewCreator.create("midi");
-    midi_view.display(new MidiViewImpl());
-  }
+
 }
 

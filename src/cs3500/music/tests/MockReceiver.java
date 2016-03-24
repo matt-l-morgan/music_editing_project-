@@ -11,17 +11,14 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 
 import cs3500.music.model.IMusicEditorModel;
+import cs3500.music.view.MidiViewImpl;
 import cs3500.music.view.MusicView;
 
 /**MockReceiver logs every call to send() in a StringBuilder for testing the MIDI view
  */
 public class MockReceiver implements Receiver {
-  private final IMusicEditorModel model;
-  StringBuilder sb;
 
-  public MockReceiver(IMusicEditorModel model) {
-    this.model = model;
-    sb = new StringBuilder();
+  public MockReceiver() {
   }
 
   public MockReceiver getReceiver() {
@@ -30,11 +27,22 @@ public class MockReceiver implements Receiver {
 
   @Override
   public void send(MidiMessage message, long timeStamp) {
+    byte[] mess;
+    mess = message.getMessage();
 
+    ShortMessage msg = (ShortMessage) message;
+
+    if (MidiViewImpl.result.equals(new StringBuilder(""))) {
+      MidiViewImpl.result.append("Tempo");
+      MidiViewImpl.result.append(timeStamp / mess[0]);
+    }
+    if (mess[0] == -111) {
+      MidiViewImpl.result.append("note volume: " + msg.getData2() + "\n");
+
+    }
   }
 
   @Override
   public void close() {
-
   }
 }
