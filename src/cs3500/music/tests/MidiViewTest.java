@@ -48,7 +48,7 @@ public class MidiViewTest {
         + "note volume: 73\n" + "note volume: 69\n" + "note volume: 71\n" + "note volume: 80\n"
         + "note volume: 79\n" + "note volume: 84\n" + "note volume: 76\n" + "note volume: 74\n"
         + "note volume: 77\n" + "note volume: 78\n" + "note volume: 75\n" + "note volume: 74\n"
-        + "note volume: 81\n" + "note volume: 70\n" + "note volume: 73\n" + "note volume: 72\n")
+        + "note volume: 81" + "note volume: 70\n" + "note volume: 73\n" + "note volume: 72\n")
       .toString(),
       MidiViewImpl.result.toString());
   }

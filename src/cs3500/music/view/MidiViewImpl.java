@@ -94,7 +94,8 @@ public class MidiViewImpl implements MusicView {
    * */
 
   /**play each note in the piece*/
-  //TODO: there should probably be a single point of control for logic that converts to/from MIDI/internal representation
+  //TODO: there should probably be a single point of control for logic that
+  // converts to/from MIDI/internal representation
   @Override public void display(IMusicEditorModel model) {
       for (int i = 0; i < model.getLastBeatInt() + 1; i++) {
         for (AbstractNote note : model.getNotesAtBeat(i)) {

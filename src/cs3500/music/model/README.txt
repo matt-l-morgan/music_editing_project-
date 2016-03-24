@@ -40,3 +40,13 @@ for an empty piece.
 -We also added volume and Instrument fields to Abstract notes to integrate with midi files
 
 - also added a tempo field to the model
+
+HW6 Views:
+- we made a console view that took advantage of the display function in our model
+- we tested this view using Output stream
+
+- we mad a gui view using swing. We had one Frame class and one panel class
+
+- we also implemented a mdid view to play the midi file audibly
+- we tested this view using mocks for the reciever and synthesizer
+

@@ -366,7 +366,8 @@ public class MusicEditorModel implements IMusicEditorModel {
       if (end <= start || pitch > 127 || instrument < 0 || instrument > 127) {
         throw new IllegalArgumentException("Invalid note.");
       }
-      this.notes.add(new Note(Pitch.toPitch(pitch % 12), (pitch / 12), (end - start), start, volume, instrument));
+      this.notes.add(new Note(Pitch.toPitch(pitch % 12), (pitch / 12), (end - start), start,
+        volume, instrument));
       return this;
     }
   }
