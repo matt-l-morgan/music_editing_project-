@@ -12,7 +12,7 @@ import javax.swing.*;
 /**
  * A skeleton Frame (i.e., a window) in Swing
  */
-public class GuiViewFrame extends JFrame implements MusicView {
+public class GuiViewFrame extends JFrame implements GuiView {
   public static final int NOTESIZE = 20;
   private final JFrame outerFrame = new JFrame("Music Editor");
   private final JPanel base = new JPanel(new BorderLayout());
@@ -78,6 +78,26 @@ public class GuiViewFrame extends JFrame implements MusicView {
       }
     }
     return times;
+  }
+
+  @Override public void update(int beat) {
+
+  }
+
+  @Override public void moveUp() {
+
+  }
+
+  @Override public void moveDown() {
+
+  }
+
+  @Override public void moveRight() {
+
+  }
+
+  @Override public void moveLeft() {
+
   }
 }
 
