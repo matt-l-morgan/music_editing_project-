@@ -24,15 +24,21 @@ public class MouseHandler implements MouseListener {
   }
 
   @Override public void mouseClicked(MouseEvent e) {
-
+    if (this.clicked.get(e.getButton()) != null) {
+      this.clicked.get(e.getButton()).run();
+    }
   }
 
   @Override public void mousePressed(MouseEvent e) {
-
+    if (this.pressed.get(e.getButton()) != null) {
+      this.pressed.get(e.getButton()).run();
+    }
   }
 
   @Override public void mouseReleased(MouseEvent e) {
-
+    if (this.released.get(e.getButton()) != null) {
+      this.released.get(e.getButton()).run();
+    }
   }
 
   @Override public void mouseEntered(MouseEvent e) {

@@ -18,14 +18,20 @@ public class KeyboardHandler implements KeyListener {
   }
 
   @Override public void keyTyped(KeyEvent e) {
-
+    if (this.whenTyped.get(e.getKeyCode()) != null) {
+      this.whenTyped.get(e.getKeyCode()).run();
+    }
   }
 
   @Override public void keyPressed(KeyEvent e) {
-
+    if (this.whenPressed.get(e.getKeyCode()) != null) {
+      this.whenPressed.get(e.getKeyCode()).run();
+    }
   }
 
   @Override public void keyReleased(KeyEvent e) {
-
+    if (this.whenReleased.get(e.getKeyCode()) != null) {
+      this.whenReleased.get(e.getKeyCode()).run();
+    }
   }
 }

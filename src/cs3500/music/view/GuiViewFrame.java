@@ -16,6 +16,7 @@ public class GuiViewFrame extends JFrame implements GuiView {
   public static final int NOTESIZE = 20;
   private final JFrame outerFrame = new JFrame("Music Editor");
   private final JPanel base = new JPanel(new BorderLayout());
+  private final JScrollPane scroll = new JScrollPane(base);
   private IMusicEditorModel model;
 
   public Dimension getPreferredSize() {
@@ -35,7 +36,9 @@ public class GuiViewFrame extends JFrame implements GuiView {
     this.base.add(pitchesPanel, BorderLayout.WEST);
     this.base.add(beatsBox, BorderLayout.NORTH);
     this.base.add(grid_with_notes, BorderLayout.CENTER);
-    this.outerFrame.add(base);
+    this.scroll.getHorizontalScrollBar().setUnitIncrement(16);
+    this.scroll.getVerticalScrollBar().setUnitIncrement(16);
+    this.outerFrame.add(scroll);
 
     this.outerFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.outerFrame.setPreferredSize(
@@ -81,7 +84,6 @@ public class GuiViewFrame extends JFrame implements GuiView {
   }
 
   @Override public void update(int beat) {
-
   }
 
   @Override public void moveUp() {
