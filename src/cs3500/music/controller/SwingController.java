@@ -21,12 +21,6 @@ import java.util.TimerTask;
 public class SwingController {
   private final Timer timer = new Timer();
   /**
-   * A Mousehandler for handling input from the mouse while removing
-   */
-  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
-    .build();
-  /**
    * A keyboard handler that specifies certain keys for music editor
    */
   private final KeyboardHandler keyboardHandler = new KeyboardHandler.Builder()
@@ -41,20 +35,90 @@ public class SwingController {
     .addKeyPressed(KeyEvent.VK_E, this.ePress)
     .build();
   /**
-   * A Mousehandler for handling input from the mouse while editing
-   */
-  private final MouseHandler mouseHandlerEditMode = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.editNotes)
-    .addMouseReleased(MouseEvent.BUTTON1, this.editNotes)
-    .build();
-  /**
    * A Mouse handler for the mouse actions in the music editor
    */
   private final MouseHandler mouseHandler = new MouseHandler.Builder()
     .addMousePressed(MouseEvent.BUTTON1, this.createNote)
     .addMouseReleased(MouseEvent.BUTTON1, this.createNote)
     .build();
+  /**
+   * A Mouse handler for handling input from the mouse while editing
+   */
+  private final MouseHandler mouseHandlerEditMode = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.editNotes)
+    .addMouseReleased(MouseEvent.BUTTON1, this.editNotes)
+    .build();
+  /**
+   * A Mousehandler for handling input from the mouse while removing
+   */
+  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
+    .build();
+  private int currentBeat;
+  private AbstractNote editNote;
+  private AbstractNote addNote;
   private MusicEditorModel model;
+  /**
+   * lambda for adding a note to a peice of music
+   */
+  private final Runnable createNote = () -> {
+    this.adding = !this.adding;
+    int clickedYCoordinate = this.mouseHandler.getCurrMouseEvent().getY();
+    int start = (this.mouseHandler.getCurrMouseEvent().getX() / 20) - 1;
+    int playableVal = -clickedYCoordinate / 20 +
+      this.model.getHighestNoteInt() + 1;
+    int xPos = this.mouseHandler.getCurrMouseEvent().getX() / 20;
+    if (clickedYCoordinate > 20
+      && xPos <= this.model.getLastBeatInt()
+      && clickedYCoordinate <= (this.model.getHighestNoteInt()
+      - this.model.getLowestNoteInt() + 2) * 20)
+    {
+      if (this.adding) {
+        this.addNote = new Note(Pitch.toPitch(playableVal % 12), playableVal / 12, 100,
+          start, 100, 1);
+      } else if (xPos - this.addNote.getStartbeat() > 0) {
+        this.model.addNote(new Note(Pitch.toPitch(this.addNote.getPandoValue() % 12),
+          this.addNote.getPandoValue() / 12,
+          xPos - this.addNote.getStartbeat(),
+          this.addNote.getStartbeat(),
+          this.addNote.getVolume(),
+          this.addNote.getInstrument()));
+      }
+    }
+  };
+  /**
+   * lambda for removing a note from a piece
+   */
+  private final Runnable removeNote = () -> {
+    int beat = (this.mouseHandlerRemoveMode.getCurrMouseEvent().getX() / 20) - 1;
+    int playableVal = -this.mouseHandlerRemoveMode.getCurrMouseEvent().getY() / 20 +
+      this.model.getHighestNoteInt() + 1;
+    AbstractNote p = this.thisNote(beat, playableVal);
+    if (p != null && this.currentBeat < this.model.getLastBeatInt()) {
+      this.model.removeNote(p);
+    }
+  };
+  /**
+   * lambda for editing a note
+   */
+  private final Runnable editNotes = () -> {
+    this.editing = !this.editing;
+    int beat = (this.mouseHandlerEditMode.getCurrMouseEvent().getX() / 20) - 1;
+    int playableVal = -this.mouseHandlerEditMode.getCurrMouseEvent().getY() / 20 +
+      this.model.getHighestNoteInt() + 1;
+    if (this.editing) {
+      this.editNote = this.thisNote(beat, playableVal);
+      if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
+        this.model.removeNote(this.editNote);
+      }
+    } else {
+      if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
+        this.model.addNote(new Note(Pitch.toPitch(playableVal % 12), playableVal / 12,
+          this.editNote.getDuration(),beat, this.editNote.getVolume(),
+          this.editNote.getInstrument()));
+      }
+    }
+  };
   private GuiView view;
   /**
    * lambda for enacting the moveUp function from the view
@@ -81,21 +145,6 @@ public class SwingController {
    */
   private final Runnable goToEnd = () -> this.view.goToEnd();
   /**
-   * A Runnable lambda for when e is pressed
-   */
-  private final Runnable ePress = () -> {
-    this.rPressed = false;
-    this.ePressed = !this.ePressed;
-    if (this.ePressed) {
-      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
-      this.view.removeMouseListener(this.mouseHandler);
-      this.view.addMouseListener(this.mouseHandlerEditMode);
-    } else {
-      this.view.removeMouseListener(this.mouseHandlerEditMode);
-      this.view.addMouseListener(this.mouseHandler);
-    }
-  };
-  /**
    * lambda for when the r key is pressed
    */
   private final Runnable rPress = () -> {
@@ -110,17 +159,19 @@ public class SwingController {
       this.view.addMouseListener(this.mouseHandler);
     }
   };
-  private int currentBeat;
   /**
-   * lambda for removing a note from a piec
+   * A Runnable lambda for when e is pressed
    */
-  private final Runnable removeNote = () -> {
-    int beat = (this.mouseHandlerRemoveMode.getCurrMouseEvent().getX() / 20) - 1;
-    int playableVal = -this.mouseHandlerRemoveMode.getCurrMouseEvent().getY() / 20 +
-      this.model.getHighestNoteInt() + 1;
-    AbstractNote p = this.thisNote(beat, playableVal);
-    if (p != null && this.currentBeat < this.model.getLastBeatInt()) {
-      this.model.removeNote(p);
+  private final Runnable ePress = () -> {
+    this.rPressed = false;
+    this.ePressed = !this.ePressed;
+    if (this.ePressed) {
+      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
+      this.view.removeMouseListener(this.mouseHandler);
+      this.view.addMouseListener(this.mouseHandlerEditMode);
+    } else {
+      this.view.removeMouseListener(this.mouseHandlerEditMode);
+      this.view.addMouseListener(this.mouseHandler);
     }
   };
   private boolean paused = false, rPressed = false, ePressed = false, editing = false,
@@ -131,57 +182,6 @@ public class SwingController {
   private final Runnable pause = () -> {
     this.view.pause();
     this.paused = !this.paused;
-  };
-  private AbstractNote editNote;
-  /**
-   * lambda for editing a note
-   */
-  private final Runnable editNotes = () -> {
-    this.editing = !this.editing;
-    int beat = (this.mouseHandlerEditMode.getCurrMouseEvent().getX() / 20) - 1;
-    int playableVal = -this.mouseHandlerEditMode.getCurrMouseEvent().getY() / 20 +
-      this.model.getHighestNoteInt() + 1;
-    if (this.editing) {
-      this.editNote = this.thisNote(beat, playableVal);
-      if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
-        this.model.removeNote(this.editNote);
-      }
-    } else {
-      if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
-        this.model.addNote(new Note(Pitch.toPitch(playableVal % 12), playableVal / 12,
-          this.editNote.getDuration(),beat, this.editNote.getVolume(),
-          this.editNote.getInstrument()));
-      }
-    }
-  };
-  private AbstractNote addNote;
-  /**
-   * lambda for adding a note to a peice of music
-   */
-  private final Runnable createNote = () -> {
-    this.adding = !this.adding;
-    int clickedYCoordinate = this.mouseHandler.getCurrMouseEvent().getY();
-    int start = (this.mouseHandler.getCurrMouseEvent().getX() / 20) - 1;
-    int playableVal = -clickedYCoordinate / 20 +
-      this.model.getHighestNoteInt() + 1;
-    int xPos = this.mouseHandler.getCurrMouseEvent().getX() / 20;
-    if (clickedYCoordinate > 20
-      && xPos <= this.model.getLastBeatInt()
-      && clickedYCoordinate <= (this.model.getHighestNoteInt()
-      - this.model.getLowestNoteInt() + 2) * 20)
-       {
-      if (this.adding) {
-        this.addNote = new Note(Pitch.toPitch(playableVal % 12), playableVal / 12, 100,
-          start, 100, 1);
-      } else if (xPos - this.addNote.getStartbeat() > 0) {
-        this.model.addNote(new Note(Pitch.toPitch(this.addNote.getPandoValue() % 12),
-          this.addNote.getPandoValue() / 12,
-          xPos - this.addNote.getStartbeat(),
-          this.addNote.getStartbeat(),
-          this.addNote.getVolume(),
-          this.addNote.getInstrument()));
-      }
-    }
   };
 
   /**
@@ -212,6 +212,8 @@ public class SwingController {
     }
     return null;
   }
+
+
 
   /**
    * starts this SwingController to a model and a view
