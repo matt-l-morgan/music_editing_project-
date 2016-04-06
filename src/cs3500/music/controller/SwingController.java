@@ -20,44 +20,80 @@ import java.util.TimerTask;
  */
 public class SwingController {
   private final Timer timer = new Timer();
-  /**
-   * A keyboard handler that specifies certain keys for music editor
-   */
-  private final KeyboardHandler keyboardHandler = new KeyboardHandler.Builder()
-    .addKeyReleased(KeyEvent.VK_SPACE, this.pause)
-    .addKeyPressed(KeyEvent.VK_UP, this.moveUp)
-    .addKeyPressed(KeyEvent.VK_DOWN, this.moveDown)
-    .addKeyPressed(KeyEvent.VK_RIGHT, this.moveRight)
-    .addKeyPressed(KeyEvent.VK_LEFT, this.moveLeft)
-    .addKeyPressed(KeyEvent.VK_HOME, this.goToStart)
-    .addKeyPressed(KeyEvent.VK_END, this.goToEnd)
-    .addKeyPressed(KeyEvent.VK_R, this.rPress)
-    .addKeyPressed(KeyEvent.VK_E, this.ePress)
-    .build();
-  /**
-   * A Mouse handler for the mouse actions in the music editor
-   */
-  private final MouseHandler mouseHandler = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.createNote)
-    .addMouseReleased(MouseEvent.BUTTON1, this.createNote)
-    .build();
-  /**
-   * A Mouse handler for handling input from the mouse while editing
-   */
-  private final MouseHandler mouseHandlerEditMode = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.editNotes)
-    .addMouseReleased(MouseEvent.BUTTON1, this.editNotes)
-    .build();
-  /**
-   * A Mousehandler for handling input from the mouse while removing
-   */
-  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
-    .build();
+  private boolean paused = false, rPressed = false, ePressed = false, editing = false,
+    adding = false;
   private int currentBeat;
   private AbstractNote editNote;
   private AbstractNote addNote;
   private MusicEditorModel model;
+  private GuiView view;
+
+
+
+  /**
+   * A Runnable lambda for pausing
+   */
+  private final Runnable pause = () -> {
+    this.view.pause();
+    this.paused = !this.paused;
+  };
+
+  /**
+   * lambda for enacting the moveUp function from the view
+   */
+  private final Runnable moveUp = () -> this.view.moveUp();
+  /**
+   * lambda for enacting the moveDown function from the view
+   */
+  private final Runnable moveDown = () -> this.view.moveDown();
+  /**
+   * A Runnable lambda for scrolling to the right on a piece of music using the arrow key
+   */
+  private final Runnable moveRight = () -> this.view.moveRight();
+  /**
+   * lambda for enacting the moveLeft function from the view
+   */
+  private final Runnable moveLeft = () -> this.view.moveLeft();
+  /**
+   * lambda for enacting the goToStart function from the view
+   */
+  private final Runnable goToStart = () -> this.view.goToStart();
+  /**
+   * lambda for enacting the goToEnd function from the view
+   */
+  private final Runnable goToEnd = () -> this.view.goToEnd();
+
+  /**
+   * lambda for when the r key is pressed
+   */
+  private final Runnable rPress = () -> {
+    this.ePressed = false;
+    this.rPressed = !this.rPressed;
+    if (this.rPressed) {
+      this.view.removeMouseListener(this.mouseHandler);
+      this.view.removeMouseListener(this.mouseHandlerEditMode);
+      this.view.addMouseListener(this.mouseHandlerRemoveMode);
+    } else {
+      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
+      this.view.addMouseListener(this.mouseHandler);
+    }
+  };
+  /**
+   * A Runnable lambda for when e is pressed
+   */
+  private final Runnable ePress = () -> {
+    this.rPressed = false;
+    this.ePressed = !this.ePressed;
+    if (this.ePressed) {
+      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
+      this.view.removeMouseListener(this.mouseHandler);
+      this.view.addMouseListener(this.mouseHandlerEditMode);
+    } else {
+      this.view.removeMouseListener(this.mouseHandlerEditMode);
+      this.view.addMouseListener(this.mouseHandler);
+    }
+  };
+
   /**
    * lambda for adding a note to a peice of music
    */
@@ -119,70 +155,43 @@ public class SwingController {
       }
     }
   };
-  private GuiView view;
+
   /**
-   * lambda for enacting the moveUp function from the view
+   * A keyboard handler that specifies certain keys for music editor
    */
-  private final Runnable moveUp = () -> this.view.moveUp();
+  private final KeyboardHandler keyboardHandler = new KeyboardHandler.Builder()
+    .addKeyReleased(KeyEvent.VK_SPACE, this.pause)
+    .addKeyPressed(KeyEvent.VK_UP, this.moveUp)
+    .addKeyPressed(KeyEvent.VK_DOWN, this.moveDown)
+    .addKeyPressed(KeyEvent.VK_RIGHT, this.moveRight)
+    .addKeyPressed(KeyEvent.VK_LEFT, this.moveLeft)
+    .addKeyPressed(KeyEvent.VK_HOME, this.goToStart)
+    .addKeyPressed(KeyEvent.VK_END, this.goToEnd)
+    .addKeyPressed(KeyEvent.VK_R, this.rPress)
+    .addKeyPressed(KeyEvent.VK_E, this.ePress)
+    .build();
   /**
-   * lambda for enacting the moveDown function from the view
+   * A Mouse handler for the mouse actions in the music editor
    */
-  private final Runnable moveDown = () -> this.view.moveDown();
+  private final MouseHandler mouseHandler = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.createNote)
+    .addMouseReleased(MouseEvent.BUTTON1, this.createNote)
+    .build();
   /**
-   * A Runnable lambda for scrolling to the right on a piece of music using the arrow key
+   * A Mouse handler for handling input from the mouse while editing
    */
-  private final Runnable moveRight = () -> this.view.moveRight();
+  private final MouseHandler mouseHandlerEditMode = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.editNotes)
+    .addMouseReleased(MouseEvent.BUTTON1, this.editNotes)
+    .build();
   /**
-   * lambda for enacting the moveLeft function from the view
+   * A Mousehandler for handling input from the mouse while removing
    */
-  private final Runnable moveLeft = () -> this.view.moveLeft();
-  /**
-   * lambda for enacting the goToStart function from the view
-   */
-  private final Runnable goToStart = () -> this.view.goToStart();
-  /**
-   * lambda for enacting the goToEnd function from the view
-   */
-  private final Runnable goToEnd = () -> this.view.goToEnd();
-  /**
-   * lambda for when the r key is pressed
-   */
-  private final Runnable rPress = () -> {
-    this.ePressed = false;
-    this.rPressed = !this.rPressed;
-    if (this.rPressed) {
-      this.view.removeMouseListener(this.mouseHandler);
-      this.view.removeMouseListener(this.mouseHandlerEditMode);
-      this.view.addMouseListener(this.mouseHandlerRemoveMode);
-    } else {
-      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
-      this.view.addMouseListener(this.mouseHandler);
-    }
-  };
-  /**
-   * A Runnable lambda for when e is pressed
-   */
-  private final Runnable ePress = () -> {
-    this.rPressed = false;
-    this.ePressed = !this.ePressed;
-    if (this.ePressed) {
-      this.view.removeMouseListener(this.mouseHandlerRemoveMode);
-      this.view.removeMouseListener(this.mouseHandler);
-      this.view.addMouseListener(this.mouseHandlerEditMode);
-    } else {
-      this.view.removeMouseListener(this.mouseHandlerEditMode);
-      this.view.addMouseListener(this.mouseHandler);
-    }
-  };
-  private boolean paused = false, rPressed = false, ePressed = false, editing = false,
-    adding = false;
-  /**
-   * A Runnable lambda for pausing
-   */
-  private final Runnable pause = () -> {
-    this.view.pause();
-    this.paused = !this.paused;
-  };
+  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
+    .build();
+
+
 
   /**
    * Updates the timer at a rate of the piece of music's tempo
