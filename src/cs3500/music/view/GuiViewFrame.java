@@ -5,6 +5,7 @@ import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.Pitch;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseListener; // Possibly of interest for handling mouse events
 
 import javax.swing.*;
@@ -14,9 +15,10 @@ import javax.swing.*;
  */
 public class GuiViewFrame extends JFrame implements GuiView {
   public static final int NOTESIZE = 20;
+  static int currBeat;
   private final JFrame outerFrame = new JFrame("Music Editor");
   private final JPanel base = new JPanel(new BorderLayout());
-  private final JScrollPane scroll = new JScrollPane(base);
+  private final JScrollPane scroller = new JScrollPane(base);
   private IMusicEditorModel model;
 
   public Dimension getPreferredSize() {
@@ -36,9 +38,9 @@ public class GuiViewFrame extends JFrame implements GuiView {
     this.base.add(pitchesPanel, BorderLayout.WEST);
     this.base.add(beatsBox, BorderLayout.NORTH);
     this.base.add(grid_with_notes, BorderLayout.CENTER);
-    this.scroll.getHorizontalScrollBar().setUnitIncrement(16);
-    this.scroll.getVerticalScrollBar().setUnitIncrement(16);
-    this.outerFrame.add(scroll);
+    this.scroller.getHorizontalScrollBar().setUnitIncrement(16);
+    this.scroller.getVerticalScrollBar().setUnitIncrement(16);
+    this.outerFrame.add(scroller);
 
     this.outerFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.outerFrame.setPreferredSize(
@@ -83,23 +85,65 @@ public class GuiViewFrame extends JFrame implements GuiView {
     return times;
   }
 
-  @Override public void update(int beat) {
-  }
-
   @Override public void moveUp() {
-
+    this.scroller.getVerticalScrollBar().setValue(this.scroller.getVerticalScrollBar().getValue() -
+      this.scroller.getVerticalScrollBar().getUnitIncrement());
   }
 
-  @Override public void moveDown() {
-
+  @Override
+  public void moveDown() {
+    this.scroller.getVerticalScrollBar().setValue(this.scroller.getVerticalScrollBar().getValue() +
+      this.scroller.getVerticalScrollBar().getUnitIncrement());
   }
 
-  @Override public void moveRight() {
-
+  @Override
+  public void moveRight() {
+    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar().getValue() +
+      this.scroller.getHorizontalScrollBar().getUnitIncrement());
   }
 
-  @Override public void moveLeft() {
+  @Override
+  public void moveLeft() {
+    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar().getValue() -
+      this.scroller.getHorizontalScrollBar().getUnitIncrement());
+  }
 
+  @Override
+  public void goToStart() {
+    this.scroller.getHorizontalScrollBar().setValue(0);
+  }
+
+  @Override
+  public void goToEnd() {
+    this.scroller.getHorizontalScrollBar().setValue(this.model.getLastBeatInt() * NOTESIZE);
+  }
+
+  @Override public void pause() {
+  }
+
+  @Override
+  public void addKeyListener(KeyListener k) {
+    this.outerFrame.addKeyListener(k);
+  }
+
+  @Override
+  public void addMouseListener(MouseListener m) {
+    this.base.addMouseListener(m);
+  }
+
+  @Override
+  public void removeMouseListener(MouseListener m) {
+    this.base.removeMouseListener(m);
+  }
+
+
+  @Override
+  public void update(int currBeat) {
+    GuiViewFrame.currBeat = currBeat;
+    if (GuiViewFrame.currBeat * GuiViewFrame.NOTESIZE >= this.outerFrame.getBounds().getSize().getWidth()
+      - GuiViewFrame.NOTESIZE) {
+      this.scroller.getHorizontalScrollBar().setValue(currBeat * GuiViewFrame.currBeat);
+    }
   }
 }
 

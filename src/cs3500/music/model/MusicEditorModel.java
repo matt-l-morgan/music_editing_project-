@@ -19,7 +19,7 @@ public class MusicEditorModel implements IMusicEditorModel {
    * the beat and the set is the notes at that beat
    */
   private HashMap<Integer, HashSet<AbstractNote>> notes = new HashMap<>();
-  private int lowestNoteInt;
+  private int lowestNoteInt = 131;
   private int highestNoteInt;
   private int lastBeatInt;
   private int tempo;
@@ -28,10 +28,6 @@ public class MusicEditorModel implements IMusicEditorModel {
    * zero argument constructor of a MusicEditorModel
    */
   public MusicEditorModel(){
-    this.notes = new HashMap<Integer, HashSet<AbstractNote>>();
-    this.highestNoteInt = -1;
-    this.lowestNoteInt = 500;
-    this.lastBeatInt = 1;
     this.tempo = 5000;
   }
 
@@ -133,14 +129,14 @@ public class MusicEditorModel implements IMusicEditorModel {
    * @param note the note to be compared
    */
   public void renewEdges(AbstractNote note){
-    int noteInt = note.getPandoValue();
-    if (noteInt > this.highestNoteInt){
-      this.highestNoteInt = noteInt;
+    int noteIndex = note.getPandoValue();
+    if (noteIndex < this.getLowestNoteInt()) {
+      this.lowestNoteInt = noteIndex;
     }
-    if (noteInt < this.lowestNoteInt){
-      this.lowestNoteInt = noteInt;
+    if (noteIndex > this.getHighestNoteInt()) {
+      this.highestNoteInt = noteIndex;
     }
-    if (note.getDuration() + note.getStartbeat() > this.lastBeatInt){
+    if (note.getDuration() + note.getStartbeat() > this.getLastBeatInt()) {
       this.lastBeatInt = note.getDuration() + note.getStartbeat();
     }
   }

@@ -56,6 +56,38 @@ public enum Pitch {
       }
     }
 
+  public static Integer toInt(Pitch pitch) {
+    switch (pitch) {
+      case C:
+        return 0;
+      case Csharp:
+        return 1;
+      case D:
+        return 2;
+      case Dsharp:
+        return 3;
+      case E:
+        return 4;
+      case F:
+        return 5;
+      case Fsharp:
+        return 6;
+      case G:
+        return 7;
+      case Gsharp:
+        return 8;
+      case A:
+        return 9;
+      case Asharp:
+        return 10;
+      case B:
+        return 11;
+      default:
+        throw new IllegalArgumentException("Not a valid pitch.");
+    }
+  }
+
+
   public static Pitch toPitch(int pitch) {
     switch (pitch) {
       case 0:

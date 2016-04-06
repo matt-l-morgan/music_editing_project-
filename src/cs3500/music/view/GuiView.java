@@ -42,4 +42,25 @@ public interface GuiView extends MusicView{
    */
   void moveLeft();
 
+  /**
+   * moves view tot he start of the piece
+   */
+  void goToStart();
+
+  /**
+   * moves view to the end of the piece
+   */
+  void goToEnd();
+
+  /**
+   * Controls the pause and play of the piece of music
+   */
+  void pause();
+
+  /**
+   * Removes a {@link MouseListener} from the GUI view
+   *
+   * @param m the {@link MouseListener} to be removed
+   */
+  void removeMouseListener(MouseListener m);
 }

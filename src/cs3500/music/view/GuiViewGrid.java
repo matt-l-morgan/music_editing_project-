@@ -27,7 +27,24 @@ public class GuiViewGrid extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     this.drawAbstractNotes(g);
+    this.paintRedLine(GuiViewFrame.currBeat, g);
     this.drawGrid(g);
+    this.repaint();
+  }
+
+  /**
+   * Draws the current beat red line
+   *
+   * @param currBeat the current beat of the piece of music
+   * @param g graphics
+   */
+  private void paintRedLine(int currBeat, Graphics g) {
+    if (currBeat >= this.model.getLastBeatInt() - 1) {
+      currBeat++;
+    }
+    g.setColor(Color.RED);
+    g.drawLine(currBeat * GuiViewFrame.NOTESIZE, 0, currBeat * GuiViewFrame.NOTESIZE,
+      (this.model.getHighestNoteInt() - this.model.getLowestNoteInt() + 1) * GuiViewFrame.NOTESIZE);
   }
 
 
@@ -46,7 +63,6 @@ public class GuiViewGrid extends JPanel {
       g.drawLine(0, i * GuiViewFrame.NOTESIZE, this.model.getLastBeatInt() * GuiViewFrame.NOTESIZE,
         i * GuiViewFrame.NOTESIZE);
     }
-
     for (int i = 0; i <= this.model.getLastBeatInt(); i++) {
       if (i % 4 == 0 || i == this.model.getLastBeatInt()) {
         g.drawLine(i * GuiViewFrame.NOTESIZE, 0, i * GuiViewFrame.NOTESIZE,
