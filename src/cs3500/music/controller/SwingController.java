@@ -15,10 +15,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ *
  * Created by mattmorgan on 3/30/16.
  */
 public class SwingController {
   private final Timer timer = new Timer();
+  /**
+   * A Mousehandler for handling input from the mouse while removing
+   */
+  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
+    .build();
   /**
    * A keyboard handler that specifies certain keys for music editor
    */
@@ -34,24 +41,18 @@ public class SwingController {
     .addKeyPressed(KeyEvent.VK_E, this.ePress)
     .build();
   /**
-   * A Mouse handler for the mouse actions in the music editor
-   */
-  private final MouseHandler mouseHandler = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.createNote)
-    .addMouseReleased(MouseEvent.BUTTON1, this.createNote)
-    .build();
-  /**
-   * A Mousehandler for handling input from the mouse while removing
-   */
-  private final MouseHandler mouseHandlerRemoveMode = new MouseHandler.Builder()
-    .addMousePressed(MouseEvent.BUTTON1, this.removeNote)
-    .build();
-  /**
    * A Mousehandler for handling input from the mouse while editing
    */
   private final MouseHandler mouseHandlerEditMode = new MouseHandler.Builder()
     .addMousePressed(MouseEvent.BUTTON1, this.editNotes)
     .addMouseReleased(MouseEvent.BUTTON1, this.editNotes)
+    .build();
+  /**
+   * A Mouse handler for the mouse actions in the music editor
+   */
+  private final MouseHandler mouseHandler = new MouseHandler.Builder()
+    .addMousePressed(MouseEvent.BUTTON1, this.createNote)
+    .addMouseReleased(MouseEvent.BUTTON1, this.createNote)
     .build();
   private MusicEditorModel model;
   private GuiView view;
@@ -83,7 +84,7 @@ public class SwingController {
    * A Runnable lambda for when e is pressed
    */
   private final Runnable ePress = () -> {
-    this.ePressed = false;
+    this.rPressed = false;
     this.ePressed = !this.ePressed;
     if (this.ePressed) {
       this.view.removeMouseListener(this.mouseHandlerRemoveMode);
@@ -98,7 +99,7 @@ public class SwingController {
    * lambda for when the r key is pressed
    */
   private final Runnable rPress = () -> {
-    this.rPressed = false;
+    this.ePressed = false;
     this.rPressed = !this.rPressed;
     if (this.rPressed) {
       this.view.removeMouseListener(this.mouseHandler);
@@ -140,15 +141,15 @@ public class SwingController {
     int beat = (this.mouseHandlerEditMode.getCurrMouseEvent().getX() / 20) - 1;
     int playableVal = -this.mouseHandlerEditMode.getCurrMouseEvent().getY() / 20 +
       this.model.getHighestNoteInt() + 1;
-    if (this.adding) {
+    if (this.editing) {
       this.editNote = this.thisNote(beat, playableVal);
       if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
         this.model.removeNote(this.editNote);
       }
     } else {
       if (this.editNote != null && this.currentBeat < this.model.getLastBeatInt()) {
-        this.model.addNote(new Note(Pitch.toPitch(playableVal % 12),
-          playableVal / 12, beat,this.editNote.getDuration(), this.editNote.getVolume(),
+        this.model.addNote(new Note(Pitch.toPitch(playableVal % 12), playableVal / 12,
+          this.editNote.getDuration(),beat, this.editNote.getVolume(),
           this.editNote.getInstrument()));
       }
     }
