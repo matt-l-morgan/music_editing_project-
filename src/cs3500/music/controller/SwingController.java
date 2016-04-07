@@ -38,7 +38,7 @@ public class SwingController {
     this.paused = !this.paused;
   };
 
-  /**
+  /**-
    * lambda for enacting the moveUp function from the view
    */
   private final Runnable moveUp = () -> this.view.moveUp();

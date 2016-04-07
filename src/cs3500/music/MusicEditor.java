@@ -23,7 +23,7 @@ public class MusicEditor {
       c.init((MusicEditorModel) model, SwingController.ViewFactory.create(args[1]));
     }
     else if (args[1].equals("midi") ) {
-      MusicView midi_view = MusicViewCreator.create("midi");
+      MidiViewImpl midi_view = new MidiViewImpl();
       midi_view.display(builder.build());
     }
     else if (args[1].equals("console")) {
