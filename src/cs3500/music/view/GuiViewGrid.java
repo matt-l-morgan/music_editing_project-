@@ -19,6 +19,9 @@ public class GuiViewGrid extends JPanel {
   private final IMusicEditorModel model;
 
 
+
+
+
   public GuiViewGrid(IMusicEditorModel model){
     this.model = model;
   }
@@ -27,7 +30,7 @@ public class GuiViewGrid extends JPanel {
   public void paintComponent(Graphics g) {
     super.paintComponent(g);
     this.drawAbstractNotes(g);
-    this.paintRedLine(GuiViewFrame.currBeat, g);
+    this.paintRedLine(GuiViewFrame.beat, g);
     this.drawGrid(g);
     this.repaint();
   }
@@ -84,6 +87,7 @@ public class GuiViewGrid extends JPanel {
         if (p.getStartbeat() == i) {
           this.drawAbstractNote(p, g);
         }
+
       }
     }
   }

@@ -166,7 +166,7 @@ public abstract class AbstractNote {
   }
 
   /**
-   * constuctor for abstractnote
+   * constuctor for abstract note
    * @param pitch
    * @param octave
    * @param duration

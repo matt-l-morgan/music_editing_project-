@@ -50,3 +50,31 @@ HW6 Views:
 - we also implemented a mdid view to play the midi file audibly
 - we tested this view using mocks for the reciever and synthesizer
 
+H7 Changes:
+- we changes the midiview to implement a ticker in order to sync in up with the composite view'
+
+- couldn't quite get the midi view working without the Composite so we commented out those tests
+
+- added a KeyHandler and MouseHandler classes to the controller folder with builder methods
+
+- added a GuiView interface that both GuiViewFrame and Composite view implement
+
+- addmouseHandler and addkeyHandlers methods added to the GuiView
+
+- added a red line that is created on the current beat of the song along with the scrolling of the
+screen
+
+- added moveUp, MoveDown, MoveLeft, MoveRight, JumpToStart, JumpToEnd functions in the Guiview
+
+- we added a composite view that takes in a Gui and a Midiview and plays them simultaneously
+
+
+- COMPOSITE FUNCTIONALITY:
+to pause/unpause: press and release the spacebar
+to add note: click where you want to place the note, drag how long you want the note to be
+to remove a note: press r key then click the head of the note you want to remove
+to edit a note's startbeat/pitch: press e key then click and hold the start of the note you wish to
+change and release left click where you want to drop the current note.
+to jump to start: click home key
+to jump to end: click end key
+

@@ -57,94 +57,90 @@ public class KeyboardHandlerTest {
   KeyEvent e = new KeyEvent(new Component() {}, 0, 10,
     InputEvent.BUTTON1_MASK, KeyEvent.VK_E, ' ', 0);
 
-  private Runnable up= () -> System.out.print("moved up");
+  private Runnable up= () -> System.out.print("up");
 
-  private Runnable down = () -> System.out.print("moved down");
+  private Runnable down = () -> System.out.print("down");
 
-  private Runnable left = () -> System.out.print("moved left");
+  private Runnable left = () -> System.out.print("left");
 
-  private Runnable right = () -> System.out.print("moved right");
+  private Runnable right = () -> System.out.print("right");
 
-  private Runnable keyhome = () -> System.out.print("moved home");
+  private Runnable keyhome = () -> System.out.print("home");
 
-  private Runnable keyend = () -> System.out.print("moved end");
+  private Runnable keyend = () -> System.out.print("end");
 
-  private Runnable rkey = () -> System.out.print("r pressed");
+  private Runnable rkey = () -> System.out.print("r");
 
-  private Runnable ekey = () -> System.out.print("e pressed");
+  private Runnable ekey = () -> System.out.print("e");
 
   @Test
   public void testUp() {
     KeyboardHandler kb = new KeyboardHandler.Builder()
       .addKeyPressed(KeyEvent.VK_UP, up).build();
     kb.keyPressed(moveUp);
-    assertEquals("moved up", outContent.toString());
+    assertEquals("up", outContent.toString());
+  }
+
+  @Test
+  public void testTyped() {
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyTyped(KeyEvent.VK_E, ekey)
+      .build();
+    kb.keyTyped(e);
+    assertEquals("e", outContent.toString());
   }
 
   @Test
   public void testDown() {
-    KeyboardHandler kb = new KeyboardHandler.Builder()
-      .addKeyPressed(KeyEvent.VK_DOWN, down).build();
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_DOWN, down)
+      .build();
     kb.keyPressed(moveDown);
-    assertEquals("moved down", outContent.toString());
+    assertEquals("down", outContent.toString());
   }
 
   @Test
   public void testLeft() {
-    KeyboardHandler kb = new KeyboardHandler.Builder()
-      .addKeyPressed(KeyEvent.VK_LEFT, left).build();
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_LEFT, left)
+      .build();
     kb.keyPressed(moveLeft);
-    assertEquals("moved left", outContent.toString());
+    assertEquals("left", outContent.toString());
   }
 
   @Test
   public void testRight() {
-    KeyboardHandler kb = new KeyboardHandler.Builder()
-      .addKeyPressed(KeyEvent.VK_RIGHT, right).build();
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_RIGHT, right)
+      .build();
     kb.keyPressed(moveRight);
-    assertEquals("moved right", outContent.toString());
+    assertEquals("right", outContent.toString());
   }
 
   @Test
   public void testHome() {
-    KeyboardHandler kb = new KeyboardHandler.Builder()
-      .addKeyPressed(KeyEvent.VK_HOME, keyhome).build();
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_HOME, keyhome)
+      .build();
     kb.keyPressed(home);
-    assertEquals("moved home", outContent.toString());
+    assertEquals("home", outContent.toString());
   }
 
   @Test
   public void testEnd() {
-    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_END, keyend).build();
+    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_END, keyend)
+      .build();
     kb.keyPressed(end);
-    assertEquals("moved end", outContent.toString());
+    assertEquals("end", outContent.toString());
   }
 
   @Test
   public void testR() {
     KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_R, rkey).build();
     kb.keyPressed(r);
-    assertEquals("r pressed", outContent.toString());
+    assertEquals("r", outContent.toString());
   }
 
   @Test
   public void testE() {
     KeyboardHandler kb = new KeyboardHandler.Builder().addKeyPressed(KeyEvent.VK_E, ekey).build();
     kb.keyPressed(e);
-    assertEquals("e pressed", outContent.toString());
+    assertEquals("e", outContent.toString());
   }
 
-  @Test
-  public void testTyped() {
-    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyTyped(KeyEvent.VK_E, ekey).build();
-    kb.keyTyped(e);
-    assertEquals("e pressed", outContent.toString());
-  }
-
-  @Test
-  public void testdone() {
-    KeyboardHandler kb = new KeyboardHandler.Builder().addKeyReleased(KeyEvent.VK_E, ekey).build();
-    kb.keyReleased(e);
-    assertEquals("e pressed", outContent.toString());
-  }
 }

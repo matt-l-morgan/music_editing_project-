@@ -21,4 +21,6 @@ public class Note extends AbstractNote {
   public Note(Pitch pitch, int octave, int duration, int startbeat, int volume, int instrument){
     super(pitch, octave, duration, startbeat, volume, instrument);
   }
+
+
 }

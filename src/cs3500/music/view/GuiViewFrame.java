@@ -11,11 +11,11 @@ import java.awt.event.MouseListener; // Possibly of interest for handling mouse 
 import javax.swing.*;
 
 /**
- * A skeleton Frame (i.e., a window) in Swing
+ * A Frame in Swing
  */
 public class GuiViewFrame extends JFrame implements GuiView {
   public static final int NOTESIZE = 20;
-  static int currBeat;
+  public static int beat;
   private final JFrame outerFrame = new JFrame("Music Editor");
   private final JPanel base = new JPanel(new BorderLayout());
   private final JScrollPane scroller = new JScrollPane(base);
@@ -25,11 +25,23 @@ public class GuiViewFrame extends JFrame implements GuiView {
     return new Dimension(100, 100);
   }
 
-  @Override public void display(IMusicEditorModel model) {
+  @Override
+  public void display(IMusicEditorModel model) {
     this.model = model;
     this.initialize();
   }
 
+  /**
+   * gets the scroller info from testing the keys
+   * @return
+   */
+  public JScrollPane getScroller(){
+    return this.scroller;
+  }
+
+  /**
+   * builds the view
+   */
   private void initialize() {
     GuiViewGrid grid_with_notes = new GuiViewGrid(this.model);
     Box pitchesPanel = placePitches();
@@ -40,11 +52,13 @@ public class GuiViewFrame extends JFrame implements GuiView {
     this.base.add(grid_with_notes, BorderLayout.CENTER);
     this.scroller.getHorizontalScrollBar().setUnitIncrement(16);
     this.scroller.getVerticalScrollBar().setUnitIncrement(16);
-    this.outerFrame.add(scroller);
+
 
     this.outerFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.outerFrame.setPreferredSize(
       new Dimension((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()), 500));
+    this.outerFrame.setBackground(Color.WHITE);
+    this.outerFrame.add(scroller);
     this.outerFrame.pack();
     this.outerFrame.setVisible(true);
   }
@@ -65,6 +79,10 @@ public class GuiViewFrame extends JFrame implements GuiView {
   }
 
 
+  /**
+   * writes all the beats in a piece of music
+   * @return the box with the beats written
+   */
   private Box placeBeats() {
     Box times = Box.createHorizontalBox();
     times.add(Box.createHorizontalStrut((NOTESIZE * 2) - 16));
@@ -85,7 +103,8 @@ public class GuiViewFrame extends JFrame implements GuiView {
     return times;
   }
 
-  @Override public void moveUp() {
+  @Override
+  public void moveUp() {
     this.scroller.getVerticalScrollBar().setValue(this.scroller.getVerticalScrollBar().getValue() -
       this.scroller.getVerticalScrollBar().getUnitIncrement());
   }
@@ -102,17 +121,26 @@ public class GuiViewFrame extends JFrame implements GuiView {
       this.scroller.getHorizontalScrollBar().getUnitIncrement());
   }
 
+  /**
+   * moving up in a piece of music
+   */
   @Override
   public void moveLeft() {
     this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar().getValue() -
       this.scroller.getHorizontalScrollBar().getUnitIncrement());
   }
 
+  /**
+   * going to the start of a piece of music
+   */
   @Override
   public void goToStart() {
     this.scroller.getHorizontalScrollBar().setValue(0);
   }
 
+  /**
+   * going to the end of a piece of music
+   */
   @Override
   public void goToEnd() {
     this.scroller.getHorizontalScrollBar().setValue(this.model.getLastBeatInt() * NOTESIZE);
@@ -121,30 +149,47 @@ public class GuiViewFrame extends JFrame implements GuiView {
   @Override public void pause() {
   }
 
+  /**
+   * adding a keyLsitener
+   * @param k the listener to be added
+   */
   @Override
   public void addKeyListener(KeyListener k) {
     this.outerFrame.addKeyListener(k);
   }
 
+  /**
+   * adding a mouse listener
+   * @param m the mouselistener to be added
+   */
   @Override
   public void addMouseListener(MouseListener m) {
     this.base.addMouseListener(m);
   }
 
+  /**
+   * removes a mouse listener to make way for a new one
+   * @param m the {@link MouseListener} to be removed
+   */
   @Override
   public void removeMouseListener(MouseListener m) {
     this.base.removeMouseListener(m);
   }
 
 
+  /**
+   * updating the gui
+   * @param currBeat the beat to be updated to
+   */
   @Override
   public void update(int currBeat) {
-    GuiViewFrame.currBeat = currBeat;
-    if (GuiViewFrame.currBeat * GuiViewFrame.NOTESIZE >= this.outerFrame.getBounds().getSize().getWidth()
+    GuiViewFrame.beat = currBeat;
+    if (GuiViewFrame.beat * GuiViewFrame.NOTESIZE >= this.outerFrame.getBounds().getSize().getWidth()
       - GuiViewFrame.NOTESIZE) {
-      this.scroller.getHorizontalScrollBar().setValue(currBeat * GuiViewFrame.currBeat);
+      this.scroller.getHorizontalScrollBar().setValue(currBeat * 20);
     }
   }
+
 }
 
 

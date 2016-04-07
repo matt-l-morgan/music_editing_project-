@@ -69,7 +69,7 @@ public class KeyboardHandler implements KeyListener {
     }
 
     /**
-     * Adds a typed key runnable} for a specific key
+     * Adds a typed key lambda for a specific key
      */
     public Builder addKeyTyped(int c, Runnable r) {
       this.typed.put(c, r);

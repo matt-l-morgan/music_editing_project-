@@ -23,9 +23,8 @@ public final class MouseHandler implements MouseListener {
    * @param entered  map for mouse enters
    * @param exited  map for mouse exits
    */
-  private MouseHandler(Map<Integer, Runnable> clicked, Map<Integer, Runnable> pressed,
-    Map<Integer, Runnable> released, Map<Integer, Runnable> entered,
-    Map<Integer, Runnable> exited) {
+  public MouseHandler(Map<Integer, Runnable> clicked, Map<Integer, Runnable> pressed,
+    Map<Integer, Runnable> released, Map<Integer, Runnable> entered, Map<Integer, Runnable> exited) {
     this.clicked = clicked;
     this.pressed = pressed;
     this.released = released;

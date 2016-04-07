@@ -91,8 +91,8 @@ public class MidiViewImpl implements MusicView {
 //  }
 
   public void playNote(AbstractNote a) throws InvalidMidiDataException {
-    Instrument[] instruments = this.synth.getDefaultSoundbank().getInstruments();
-    this.synth.getChannels()[0].programChange(instruments[a.getInstrument()].getPatch()
+    Instrument[] inst = this.synth.getDefaultSoundbank().getInstruments();
+    this.synth.getChannels()[0].programChange(inst[a.getInstrument()].getPatch()
       .getProgram());
     MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, 0, a.getPandoValue(),
       a.getVolume());
@@ -100,8 +100,8 @@ public class MidiViewImpl implements MusicView {
   }
 
   public void stopNote(AbstractNote a) throws InvalidMidiDataException {
-    Instrument[] instruments = this.synth.getDefaultSoundbank().getInstruments();
-    this.synth.getChannels()[0].programChange(instruments[a.getInstrument()].getPatch()
+    Instrument[] inst = this.synth.getDefaultSoundbank().getInstruments();
+    this.synth.getChannels()[0].programChange(inst[a.getInstrument()].getPatch()
       .getProgram());
     MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, 0, a.getPandoValue(),
       a.getVolume());

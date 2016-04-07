@@ -11,7 +11,7 @@ public final class CompositeView implements GuiView {
   private final GuiViewFrame guiFrame;
   private final MusicView midi;
   private IMusicEditorModel m;
-  private boolean paused = false;
+  public boolean paused = false;
 
   /**
    * Constructor for a composite view
@@ -26,8 +26,11 @@ public final class CompositeView implements GuiView {
   @Override
   public void display(IMusicEditorModel m) {
     this.m = m;
-    this.guiFrame.display(this.m);
+    this.guiFrame.display(m);
   }
+
+
+
 
   /**
    * passes the up movemnet to the gui view
@@ -82,11 +85,20 @@ public final class CompositeView implements GuiView {
   }
 
   /**
-   * pauses and unpauses
+   * gets the current beat
+   * @return
+   */
+  public int getCurrentBeat(){
+    return GuiViewFrame.beat;
+  }
+
+  /**
+   * pauses and un pauses
    */
   public void pause() {
     this.paused = !this.paused;
   }
+
 
   /**
    * Adds a key Listener

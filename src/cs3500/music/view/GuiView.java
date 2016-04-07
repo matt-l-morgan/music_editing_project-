@@ -25,6 +25,7 @@ public interface GuiView extends MusicView{
    */
   void update(int beat);
 
+
   /**
    * moves the view up when for the controller to use
    */
@@ -63,4 +64,5 @@ public interface GuiView extends MusicView{
    * @param m the {@link MouseListener} to be removed
    */
   void removeMouseListener(MouseListener m);
+
 }
