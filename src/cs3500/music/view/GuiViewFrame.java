@@ -117,7 +117,8 @@ public class GuiViewFrame extends JFrame implements GuiView {
 
   @Override
   public void moveRight() {
-    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar().getValue() +
+    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar()
+      .getValue() +
       this.scroller.getHorizontalScrollBar().getUnitIncrement());
   }
 
@@ -126,7 +127,8 @@ public class GuiViewFrame extends JFrame implements GuiView {
    */
   @Override
   public void moveLeft() {
-    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar().getValue() -
+    this.scroller.getHorizontalScrollBar().setValue(this.scroller.getHorizontalScrollBar()
+      .getValue() -
       this.scroller.getHorizontalScrollBar().getUnitIncrement());
   }
 
@@ -184,7 +186,8 @@ public class GuiViewFrame extends JFrame implements GuiView {
   @Override
   public void update(int currBeat) {
     GuiViewFrame.beat = currBeat;
-    if (GuiViewFrame.beat * GuiViewFrame.NOTESIZE >= this.outerFrame.getBounds().getSize().getWidth()
+    if (GuiViewFrame.beat * GuiViewFrame.NOTESIZE >= this.outerFrame.getBounds().getSize()
+      .getWidth()
       - GuiViewFrame.NOTESIZE) {
       this.scroller.getHorizontalScrollBar().setValue(currBeat * 20);
     }
